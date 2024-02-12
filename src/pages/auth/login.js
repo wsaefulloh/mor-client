@@ -1,30 +1,20 @@
-import { useCallback, useState } from 'react';
 import Head from 'next/head';
-import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {
-  Alert,
   Box,
   Button,
-  FormHelperText,
-  Link,
   Stack,
-  Tab,
-  Tabs,
   TextField,
   Typography
 } from '@mui/material';
-import { useAuth } from '../../hooks/use-auth';
 import { Layout as AuthLayout } from '../../layouts/auth/layout';
 import axios from 'axios';
 import { config } from '../../helpers/constant';
 
 const Page = () => {
   const router = useRouter();
-  const auth = useAuth();
-  const [method, setMethod] = useState('email');
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -50,15 +40,20 @@ const Page = () => {
           email: values.email,
           password: values.password,
         }).then((res) => {
-          console.log(res)
-          localStorage.setItem("auth", true)
-          localStorage.setItem("role", res.data.data.data[0].name)
-          localStorage.setItem("user_id", res.data.data.data[0].user_id)
-          router.push('/account');
+          if (res.data.data[0].name === "Admin") {
+            localStorage.setItem("auth", true)
+            localStorage.setItem("role", res.data.data[0].name)
+            localStorage.setItem("user_id", res.data.data[0].user_id)
+            localStorage.setItem("token", res.data.token)
+            router.push('/account');
+          } else {
+            helpers.setStatus({ success: false });
+            helpers.setErrors({ submit: "Anda bukan Admin" });
+            helpers.setSubmitting(false);
+          }
         }).catch((err) => {
-          console.log(err)
           helpers.setStatus({ success: false });
-          helpers.setErrors({ submit: err.message });
+          helpers.setErrors({ submit: "Login gagal" });
           helpers.setSubmitting(false);
         })
         // router.push('/account');
@@ -69,21 +64,6 @@ const Page = () => {
       }
     }
   });
-
-  const handleMethodChange = useCallback(
-    (event, value) => {
-      setMethod(value);
-    },
-    []
-  );
-
-  const handleSkip = useCallback(
-    () => {
-      auth.skip();
-      router.push('/');
-    },
-    [auth, router]
-  );
 
   return (
     <>
@@ -118,6 +98,7 @@ const Page = () => {
                 Login
               </Typography>
             </Stack>
+
             <form
               noValidate
               onSubmit={formik.handleSubmit}
@@ -129,10 +110,10 @@ const Page = () => {
                   helperText={formik.touched.email && formik.errors.email}
                   label="Email Address"
                   name="email"
-                  onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   type="email"
                   value={formik.values.email}
+                  focused
                 />
                 <TextField
                   error={!!(formik.touched.password && formik.errors.password)}
@@ -140,10 +121,10 @@ const Page = () => {
                   helperText={formik.touched.password && formik.errors.password}
                   label="Password"
                   name="password"
-                  onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   type="password"
                   value={formik.values.password}
+                  focused
                 />
               </Stack>
               {formik.errors.submit && (
@@ -158,7 +139,12 @@ const Page = () => {
               <Button
                 fullWidth
                 size="large"
-                sx={{ mt: 3 }}
+                sx={{
+                  mt: 3, '&:hover': {
+                    backgroundColor: '#122647',
+                    color: '#ffffff',
+                  },
+                }}
                 type="submit"
                 variant="contained"
               >

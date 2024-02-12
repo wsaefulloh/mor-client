@@ -35,10 +35,49 @@ export const DatabaseKaryawanTable = (props) => {
     <Card>
       <Scrollbar>
         <Box sx={{ minWidth: 800 }}>
-          <Table>
+          <Table >
             <TableHead>
               <TableRow>
                 <TableCell>
+                </TableCell>
+                <TableCell sx={{ minWidth: 250 }}>
+                </TableCell>
+                <TableCell>
+                </TableCell>
+                <TableCell>
+                </TableCell>
+                <TableCell>
+                </TableCell>
+                <TableCell>
+                </TableCell>
+                <TableCell>
+                </TableCell>
+                <TableCell colSpan={3} sx={{ borderLeft: "1px solid" }}>
+                  Tingkat Kehadiran (ATR)
+                </TableCell>
+                <TableCell colSpan={3} sx={{ borderLeft: "1px solid" }}>
+                  Disiplin Waktu dan Kerja
+                </TableCell>
+                <TableCell colSpan={3} sx={{ borderLeft: "1px solid" }}>
+                  Pencapaian Hours Meter
+                </TableCell>
+                <TableCell colSpan={3} sx={{ borderLeft: "1px solid" }}>
+                  Productivity Individu
+                </TableCell>
+                <TableCell colSpan={3} sx={{ borderLeft: "1px solid" }}>
+                  Tingkat Keseringan Insiden
+                </TableCell>
+                <TableCell colSpan={3} sx={{ borderLeft: "1px solid", borderRight: "1px solid" }}>
+                  Hazard Report
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableHead>
+              <TableRow>
+                <TableCell>
+
+                </TableCell>
+                <TableCell width={150}>
                   Nama
                 </TableCell>
                 <TableCell>
@@ -48,7 +87,67 @@ export const DatabaseKaryawanTable = (props) => {
                   Email
                 </TableCell>
                 <TableCell>
-                  Password
+                  Jabatan
+                </TableCell>
+                <TableCell>
+                  Versatility
+                </TableCell>
+                <TableCell>
+                  Grade
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Hasil
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Nilai MOR
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Nilai Akhir
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Hasil
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Nilai MOR
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Nilai Akhir
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Hasil
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Nilai MOR
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Nilai Akhir
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Hasil
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Nilai MOR
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Nilai Akhir
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Hasil
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Nilai MOR
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Nilai Akhir
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Hasil
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Nilai MOR
+                </TableCell>
+                <TableCell sx={{ border: "1px solid" }}>
+                  Nilai Akhir
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -60,6 +159,34 @@ export const DatabaseKaryawanTable = (props) => {
                     hover
                     key={customer.nrp}
                   >
+                    <TableCell>
+                      <TableCell>
+                        <Stack
+                          alignItems="center"
+                          direction="row"
+                          spacing={2}
+                        >
+                          <Button
+                            sx={{
+                              mt: 3, backgroundColor: '#122647',
+                              color: '#ffffff', '&:hover': {
+                                color: '#122647',
+                              },
+                            }}
+                            onClick={() => {
+                              // setOpen(true)
+                              // setNamaSelected(customer.name)
+                              // setNrpSelected(customer.nrp)
+                              // setHasilAkhir(customer.hasil_akhir)
+                              // setHasilMor(customer.hasil_mor)
+                              // setUserId(customer.user_id)
+                              // setDisiplinWaktuId(customer.disiplin_kerja_id)
+                            }}>
+                            Update
+                          </Button>
+                        </Stack>
+                      </TableCell>
+                    </TableCell>
                     <TableCell>
                       <Stack
                         alignItems="center"
@@ -96,7 +223,7 @@ export const DatabaseKaryawanTable = (props) => {
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
       />
-    </Card>
+    </Card >
   );
 };
 

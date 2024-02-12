@@ -4,7 +4,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
-import { AuthConsumer, AuthProvider } from '../contexts/auth-context';
 import { useNProgress } from '../hooks/use-nprogress';
 import { createTheme } from '../theme';
 import { createEmotionCache } from '../utils/create-emotion-cache';
@@ -27,7 +26,7 @@ const App = (props) => {
     <CacheProvider value={emotionCache}>
       <Head>
         <title>
-          Devias Kit
+          MOR Application
         </title>
         <meta
           name="viewport"
@@ -35,18 +34,12 @@ const App = (props) => {
         />
       </Head>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <AuthProvider>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <AuthConsumer>
-              {
-                (auth) => auth.isLoading
-                  ? <SplashScreen />
-                  : getLayout(<Component {...pageProps} />)
-              }
-            </AuthConsumer>
-          </ThemeProvider>
-        </AuthProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          {
+            getLayout(<Component {...pageProps} />)
+          }
+        </ThemeProvider>
       </LocalizationProvider>
     </CacheProvider>
   );

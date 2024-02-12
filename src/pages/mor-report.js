@@ -1,25 +1,12 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import Head from 'next/head';
-import { subDays, subHours } from 'date-fns';
-import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
-import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
-import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
-import { Box, Button, Container, Stack, SvgIcon, Typography, Unstable_Grid2 as Grid, TextField } from '@mui/material';
-import { useSelection } from '../hooks/use-selection';
+import { Box, Container, Stack, Typography, Unstable_Grid2 as Grid, TextField } from '@mui/material';
 import { Layout as DashboardLayout } from '../layouts/dashboard/layout';
-import { CustomersTable } from '../sections/customer/customers-table';
-import { CustomersSearch } from '../sections/customer/customers-search';
-import { applyPagination } from '../utils/apply-pagination';
-import { TingkatKehadiranTable } from '../sections/table/tingkat-kehadiran-table';
 import axios from 'axios';
 import { useEffect } from 'react';
-import { getTingkatKehadiranCalculate } from '../helpers/calculate-tingkat-kehadiran'
 import { config } from '../helpers/constant';
-import { TingkatKeseringanInsidenTable } from '../sections/table/tingkat-keseringan-insiden-table';
 import { DatabaseKaryawanTable } from '../sections/table/database-karyawan-table';
 import { useRouter } from 'next/router';
-
-const now = new Date();
 
 const month = [
   {
@@ -72,26 +59,6 @@ const month = [
   },
 ];
 
-const year = [
-  {
-    value: '2023',
-    label: '2023'
-  },
-  {
-    value: '2024',
-    label: '2024'
-  }
-];
-
-const useCustomers = (page, rowsPerPage) => {
-  return useMemo(
-    () => {
-      return applyPagination(data, page, rowsPerPage);
-    },
-    [page, rowsPerPage]
-  );
-};
-
 const Page = () => {
   const router = useRouter();
   const [page, setPage] = useState(0);
@@ -99,10 +66,12 @@ const Page = () => {
   const [dataResult, setDataResult] = useState([]);
   const [count, setCount] = useState(0);
   const [values, setValues] = useState({
-    year: year[0].value,
-    month: month[0].value,
+    year: new Date().getFullYear(),
+    month: month[new Date().getMonth()].value,
     search: ""
   });
+
+  const [listYear, setListYear] = useState([]);
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -131,12 +100,19 @@ const Page = () => {
 
   const getTingkatKehadiran = async (page, size, month, year, search_name) => {
     let dataUser
-    await axios.get(`${config.baseURL}/api/serve-data/database-user?page=${Number(page) + 1}&size=${size}&search_name=${search_name}`).then((res) => {
+    await axios.get(`${config.baseURL}/api/serve-data/database-user?page=${Number(page) + 1}&size=${size}&search_name=${search_name}`, {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem("token")
+      }
+    }).then((res) => {
       dataUser = res
       setDataResult(res.data.data.data.data)
       setCount(res.data.data.data.itemCount)
     }).catch((err) => {
-      console.log(err)
+      if (err.response.status === 401 || err.response.status === 401) {
+        router.push('/auth/login');
+        localStorage.clear();
+      }
     })
     console.log(dataUser)
   };
@@ -146,8 +122,14 @@ const Page = () => {
   }, [page, rowsPerPage, values])
 
   useEffect(() => {
+    let listYearArray = []
+    for (let i = 3; i >= 0; i--) {
+      listYearArray.push({ value: `${Number(new Date().getFullYear()) - i}`, label: `${Number(new Date().getFullYear()) - i}` })
+    }
+    setListYear(listYearArray)
     if (localStorage.getItem("auth") !== "true") {
       router.push('/auth/login');
+      localStorage.clear();
     }
     getTingkatKehadiran(0, 5, values.month, values.year, values.search)
   }, [])
@@ -156,7 +138,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Database Karyawan | MOR Recap
+          Report | MOR Recap
         </title>
       </Head>
       <Box
@@ -175,10 +157,58 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Database Karyawan
+                  MOR Report
                 </Typography>
               </Stack>
             </Stack>
+            <Grid
+              xs={12}
+              md={6}
+            >
+              <TextField
+                fullWidth
+                label="Pilih Tahun"
+                name="year"
+                onChange={handleChange}
+                required
+                select
+                SelectProps={{ native: true }}
+                value={values.year}
+              >
+                {listYear.map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid
+              xs={12}
+              md={6}
+            >
+              <TextField
+                fullWidth
+                label="Pilih Bulan"
+                name="month"
+                onChange={handleChange}
+                required
+                select
+                SelectProps={{ native: true }}
+                value={values.month}
+              >
+                {month.map((option) => (
+                  <option
+                    key={option.value}
+                    value={option.value}
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </TextField>
+            </Grid>
             <Grid
               xs={12}
               md={6}

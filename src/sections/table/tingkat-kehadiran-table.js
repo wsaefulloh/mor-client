@@ -1,10 +1,7 @@
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
 import {
-  Avatar,
   Box,
   Card,
-  Checkbox,
   Stack,
   Table,
   TableBody,
@@ -15,7 +12,6 @@ import {
   Typography
 } from '@mui/material';
 import { Scrollbar } from '../../components/scrollbar';
-import { getInitials } from '../../utils/get-initials';
 import CustomizedDialogs from '../modals/modals-tingkat-kehadiran';
 import { useState } from 'react';
 import Button from "@mui/material/Button";
@@ -80,8 +76,6 @@ export const TingkatKehadiranTable = (props) => {
             </TableHead>
             <TableBody>
               {items.map((customer) => {
-                // const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
-
                 return (
                   <TableRow
                     hover
@@ -93,7 +87,13 @@ export const TingkatKehadiranTable = (props) => {
                         direction="row"
                         spacing={2}
                       >
-                        <Button autoFocus
+                        <Button
+                          sx={{
+                            mt: 3, backgroundColor: '#122647',
+                            color: '#ffffff', '&:hover': {
+                              color: '#122647',
+                            },
+                          }}
                           onClick={() => {
                             setOpen(true)
                             setNamaSelected(customer.name)

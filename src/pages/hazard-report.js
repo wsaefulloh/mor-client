@@ -1,26 +1,12 @@
 import { useCallback, useMemo, useState } from 'react';
 import Head from 'next/head';
-import { subDays, subHours } from 'date-fns';
-import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
-import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
-import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
-import { Box, Button, Container, Stack, SvgIcon, Typography, Unstable_Grid2 as Grid, TextField } from '@mui/material';
-import { useSelection } from '../hooks/use-selection';
+import { Box, Container, Stack, Typography, Unstable_Grid2 as Grid, TextField } from '@mui/material';
 import { Layout as DashboardLayout } from '../layouts/dashboard/layout';
-import { CustomersTable } from '../sections/customer/customers-table';
-import { CustomersSearch } from '../sections/customer/customers-search';
-import { applyPagination } from '../utils/apply-pagination';
-import { TingkatKehadiranTable } from '../sections/table/tingkat-kehadiran-table';
 import axios from 'axios';
 import { useEffect } from 'react';
-import { getTingkatKehadiranCalculate } from '../helpers/calculate-tingkat-kehadiran'
 import { config } from '../helpers/constant';
-import { TingkatKeseringanInsidenTable } from '../sections/table/tingkat-keseringan-insiden-table';
 import { HazardReportTable } from '../sections/table/hazard-report-table';
 import { useRouter } from 'next/router';
-
-const now = new Date();
-
 
 const month = [
   {
@@ -73,36 +59,18 @@ const month = [
   },
 ];
 
-const year = [
-  {
-    value: '2023',
-    label: '2023'
-  },
-  {
-    value: '2024',
-    label: '2024'
-  }
-];
-
-const useCustomers = (page, rowsPerPage) => {
-  return useMemo(
-    () => {
-      return applyPagination(data, page, rowsPerPage);
-    },
-    [page, rowsPerPage]
-  );
-};
-
 const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [dataResult, setDataResult] = useState([]);
   const [count, setCount] = useState(0);
   const [values, setValues] = useState({
-    year: year[0].value,
-    month: month[0].value,
+    year: new Date().getFullYear(),
+    month: month[new Date().getMonth()].value,
     search: ""
   });
+
+  const [listYear, setListYear] = useState([])
 
   const [hasil, setHasil] = useState(0);
   const [hasilMor, setHasilMor] = useState(0);
@@ -159,15 +127,20 @@ const Page = () => {
   );
 
   const getTingkatKehadiran = async (page, size, month, year, search_name) => {
-    let dataUser
-    await axios.get(`${config.baseURL}/api/serve-data/hazard-report?page=${Number(page) + 1}&size=${size}&month=${month}&year=${year}&search_name=${search_name}`).then((res) => {
-      dataUser = res
+    await axios.get(`${config.baseURL}/api/serve-data/hazard-report?page=${Number(page) + 1}&size=${size}&month=${month}&year=${year}&search_name=${search_name}`, {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem("token")
+      }
+    }).then((res) => {
       setDataResult(res.data.data.data.data)
       setCount(res.data.data.data.itemCount)
     }).catch((err) => {
+      if (err.response.status === 401 || err.response.status === 401) {
+        router.push('/auth/login');
+        localStorage.clear();
+      }
       console.log(err)
     })
-    console.log(dataUser)
   };
 
   const createTingkatKehadiran = async (params) => {
@@ -181,11 +154,17 @@ const Page = () => {
         user_name: {
           connect: [{ id: Number(params.user_id) }]
         },
+      }, headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem("token")
       }
     }).then((res) => {
       console.log(res)
       getTingkatKehadiran(page, rowsPerPage, values.month, values.year, values.search)
     }).catch((err) => {
+      if (err.response.status === 401 || err.response.status === 401) {
+        router.push('/auth/login');
+        localStorage.clear();
+      }
       console.log(err)
     })
     return "OK"
@@ -199,11 +178,17 @@ const Page = () => {
         nilai_akhir: params.nilai_akhir,
         bulan: params.bulan,
         tahun: params.tahun,
+      }, headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem("token")
       }
     }).then((res) => {
       console.log(res)
       getTingkatKehadiran(page, rowsPerPage, values.month, values.year, values.search)
     }).catch((err) => {
+      if (err.response.status === 401 || err.response.status === 401) {
+        router.push('/auth/login');
+        localStorage.clear();
+      }
       console.log(err)
     })
     return "OK"
@@ -238,12 +223,17 @@ const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
+    let listYearArray = []
+    for (let i = 3; i >= 0; i--) {
+      listYearArray.push({ value: `${Number(new Date().getFullYear()) - i}`, label: `${Number(new Date().getFullYear()) - i}` })
+    }
+    setListYear(listYearArray)
     if (localStorage.getItem("auth") !== "true") {
       router.push('/auth/login');
+      localStorage.clear();
     }
     getTingkatKehadiran(0, 5, values.month, values.year, values.search)
   }, [])
-
 
   return (
     <>
@@ -286,7 +276,7 @@ const Page = () => {
                 SelectProps={{ native: true }}
                 value={values.year}
               >
-                {year.map((option) => (
+                {listYear.map((option) => (
                   <option
                     key={option.value}
                     value={option.value}

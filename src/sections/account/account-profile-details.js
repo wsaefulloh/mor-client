@@ -76,7 +76,7 @@ export const AccountProfileDetails = (props) => {
             >
               <Grid
                 xs={12}
-                md={6}
+                md={12}
               >
                 <Typography sx={{ pb: 1, fontSize: 13, pt: 3 }}>
                   Nama

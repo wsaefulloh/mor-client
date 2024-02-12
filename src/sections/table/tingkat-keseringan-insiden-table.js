@@ -94,7 +94,13 @@ export const TingkatKeseringanInsidenTable = (props) => {
                         direction="row"
                         spacing={2}
                       >
-                        <Button autoFocus
+                        <Button
+                          sx={{
+                            mt: 3, backgroundColor: '#122647',
+                            color: '#ffffff', '&:hover': {
+                              color: '#122647',
+                            },
+                          }}
                           onClick={() => {
                             setOpen(true)
                             setNamaSelected(customer.name)

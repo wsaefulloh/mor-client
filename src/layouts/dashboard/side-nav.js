@@ -47,13 +47,14 @@ export const SideNav = (props) => {
           <Box
             component={NextLink}
             href="/"
+            width={'100%'}
             sx={{
               display: 'inline-flex',
-              height: 32,
-              width: 32
+              justifyContent: "center"
             }}
           >
-            <Logo />
+            <img width='100%' alt="Logo"
+              src={"../assets/logos/Logo.png"}></img>
           </Box>
           <Box
             sx={{
@@ -72,13 +73,13 @@ export const SideNav = (props) => {
                 color="inherit"
                 variant="subtitle1"
               >
-                MOR Recap App
+                MOR Application
               </Typography>
               <Typography
                 color="neutral.400"
                 variant="body2"
               >
-                Development
+                Welcome, Admin
               </Typography>
             </div>
             <SvgIcon

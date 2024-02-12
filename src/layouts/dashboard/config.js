@@ -86,8 +86,8 @@ export const items = () => {
         )
       },
       {
-        title: 'Karyawan Database',
-        path: '/database-karyawan',
+        title: 'MOR Report',
+        path: '/mor-report',
         icon: (
           <SvgIcon fontSize="small">
             <UserPlusIcon />

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import NextLink from 'next/link';
 import { Box, Typography, Unstable_Grid2 as Grid } from '@mui/material';
 import { Logo } from '../../components/logo';
+// import Riung from "assets/logos/Logo.png";
 
 // TODO: Change subtitle text
 
@@ -40,17 +41,8 @@ export const Layout = (props) => {
               width: '100%'
             }}
           >
-            <Box
-              component={NextLink}
-              href="/"
-              sx={{
-                display: 'inline-flex',
-                height: 32,
-                width: 32
-              }}
-            >
-              <Logo />
-            </Box>
+            <img width='150px' alt="Logo"
+              src={"../assets/logos/Logo.png"}></img>
           </Box>
           {children}
         </Grid>
@@ -68,13 +60,13 @@ export const Layout = (props) => {
             }
           }}
         >
-          <Box sx={{ p: 3 }}>
+          <Box sx={{ p: 9 }}>
             <Typography
               align="center"
               color="inherit"
               sx={{
-                fontSize: '24px',
-                lineHeight: '32px',
+                fontSize: '54px',
+                // lineHeight: '32px',
                 mb: 1
               }}
               variant="h1"
@@ -82,7 +74,7 @@ export const Layout = (props) => {
               Welcome to{' '}
               <Box
                 component="a"
-                sx={{ color: '#15B79E' }}
+                sx={{ color: 'yellow' }}
                 target="_blank"
               >
                 Monthly Operation Report
