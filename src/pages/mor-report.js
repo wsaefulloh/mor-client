@@ -67,7 +67,7 @@ const Page = () => {
   const [count, setCount] = useState(0);
   const [values, setValues] = useState({
     year: new Date().getFullYear(),
-    month: month[new Date().getMonth()].value,
+    month: month[new Date().getMonth() - 1].value,
     search: ""
   });
 
@@ -100,7 +100,7 @@ const Page = () => {
 
   const getTingkatKehadiran = async (page, size, month, year, search_name) => {
     let dataUser
-    await axios.get(`${config.baseURL}/api/serve-data/database-user?page=${Number(page) + 1}&size=${size}&search_name=${search_name}`, {
+    await axios.get(`${config.baseURL}/api/serve-data/database-user?page=${Number(page) + 1}&size=${size}&month=${month}&year=${year}&search_name=${search_name}`, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem("token")
       }
