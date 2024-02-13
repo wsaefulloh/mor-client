@@ -9,17 +9,14 @@ export const AccountPopover = (props) => {
   const router = useRouter();
   const auth = useAuth();
 
-  const handleSignOut = useCallback(
-    () => {
-      onClose?.();
-      auth.signOut();
-      localStorage.removeItem("user_id")
-      localStorage.removeItem("role")
-      localStorage.removeItem("auth")
-      router.push('/auth/login');
-    },
-    [onClose, auth, router]
-  );
+  const handleSignOut = () => {
+    onClose?.();
+    localStorage.removeItem("user_id")
+    localStorage.removeItem("role")
+    localStorage.removeItem("auth")
+    localStorage.clear()
+    router.push('/auth/login');
+  };
 
   return (
     <Popover
