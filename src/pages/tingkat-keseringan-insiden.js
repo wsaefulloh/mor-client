@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { config } from '../helpers/constant';
 import { TingkatKeseringanInsidenTable } from '../sections/table/tingkat-keseringan-insiden-table';
 import { useRouter } from 'next/router';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const month = [
   {
@@ -78,6 +79,7 @@ const Page = () => {
   const [hasilAkhir, setHasilAkhir] = useState(0);
   const [userId, setUserId] = useState(0);
   const [keseringanInsidenId, setKeseringanInsidenId] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleHasil = (e) => {
     if (e == 0) {
@@ -128,6 +130,7 @@ const Page = () => {
   );
 
   const getTingkatKehadiran = async (page, size, month, year, search_name) => {
+    setIsLoading(true)
     await axios.get(`${config.baseURL}/api/serve-data/keseringan-insiden?page=${Number(page) + 1}&size=${size}&month=${month}&year=${year}&search_name=${search_name}`, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem("token")
@@ -142,6 +145,7 @@ const Page = () => {
       }
       console.log(err)
     })
+    setIsLoading(false)
   };
 
   const createTingkatKehadiran = async (params) => {
@@ -151,11 +155,13 @@ const Page = () => {
         nilai_mor: params.nilai_mor,
         nilai_akhir: params.nilai_akhir,
         bulan: params.bulan,
-        tahun: params.tahun,
+        tahun: params.tahun.toString(),
         user_name: {
           connect: [{ id: Number(params.user_id) }]
         },
-      }, headers: {
+      }
+    }, {
+      headers: {
         'Authorization': 'Bearer ' + localStorage.getItem("token")
       }
     }).then((res) => {
@@ -178,8 +184,10 @@ const Page = () => {
         nilai_mor: params.nilai_mor,
         nilai_akhir: params.nilai_akhir,
         bulan: params.bulan,
-        tahun: params.tahun,
-      }, headers: {
+        tahun: params.tahun.toString(),
+      }
+    }, {
+      headers: {
         'Authorization': 'Bearer ' + localStorage.getItem("token")
       }
     }).then((res) => {
@@ -324,23 +332,32 @@ const Page = () => {
                 value={values.search}
               />
             </Grid>
-            <TingkatKeseringanInsidenTable
-              hasil={hasil}
-              hasilMor={hasilMor}
-              hasilAkhir={hasilAkhir}
-              setHasil={handleHasil}
-              setHasilMor={setHasilMor}
-              setHasilAkhir={setHasilAkhir}
-              count={count}
-              items={dataResult}
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              page={page}
-              rowsPerPage={rowsPerPage}
-              confirm={confirmPerubahan}
-              setUserId={setUserId}
-              setKeseringanInsidenId={setKeseringanInsidenId}
-            />
+            {isLoading ? (
+              <>
+                <div style={{ display: "flex", justifyContent: "center", paddingTop: "120px" }}>
+                  <CircularProgress style={{ color: "#122647", width: "40px" }} />
+                </div>
+              </>
+            ) : (
+              <TingkatKeseringanInsidenTable
+                hasil={hasil}
+                hasilMor={hasilMor}
+                hasilAkhir={hasilAkhir}
+                setHasil={handleHasil}
+                setHasilMor={setHasilMor}
+                setHasilAkhir={setHasilAkhir}
+                count={count}
+                items={dataResult}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleRowsPerPageChange}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                confirm={confirmPerubahan}
+                setUserId={setUserId}
+                setKeseringanInsidenId={setKeseringanInsidenId}
+              />
+            )}
+
           </Stack>
         </Container>
       </Box>

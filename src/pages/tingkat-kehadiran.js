@@ -2,13 +2,13 @@ import { useCallback, useMemo, useState } from 'react';
 import Head from 'next/head';
 import { Box, Container, Stack, Typography, Unstable_Grid2 as Grid, TextField } from '@mui/material';
 import { Layout as DashboardLayout } from '../layouts/dashboard/layout';
-import { applyPagination } from '../utils/apply-pagination';
 import { TingkatKehadiranTable } from '../sections/table/tingkat-kehadiran-table';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { getTingkatKehadiranCalculate } from '../helpers/calculate-tingkat-kehadiran'
 import { config } from '../helpers/constant';
 import { useRouter } from 'next/router';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const month = [
   {
@@ -79,6 +79,7 @@ const Page = () => {
   const [hasilAkhir, setHasilAkhir] = useState(0);
   const [userId, setUserId] = useState(0);
   const [tingkatKehadiranId, setTingkatKehadiranId] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleHasil = (e) => {
     setHasil(e)
@@ -113,6 +114,7 @@ const Page = () => {
   );
 
   const getTingkatKehadiran = async (page, size, month, year, search_name) => {
+    setIsLoading(true)
     await axios.get(`${config.baseURL}/api/serve-data/tingkat-kehadiran?page=${Number(page) + 1}&size=${size}&month=${month}&year=${year}&search_name=${search_name}`, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem("token")
@@ -127,6 +129,7 @@ const Page = () => {
       }
       console.log(err)
     })
+    setIsLoading(false)
   };
 
   const createTingkatKehadiran = async (params) => {
@@ -136,11 +139,12 @@ const Page = () => {
         nilai_mor: params.nilai_mor,
         nilai_akhir: params.nilai_akhir,
         bulan: params.bulan,
-        tahun: params.tahun,
+        tahun: params.tahun.toString(),
         user_name: {
           connect: [{ id: Number(params.user_id) }]
         },
-      },
+      }
+    }, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem("token")
       }
@@ -164,8 +168,10 @@ const Page = () => {
         nilai_mor: params.nilai_mor,
         nilai_akhir: params.nilai_akhir,
         bulan: params.bulan,
-        tahun: params.tahun,
+        tahun: params.tahun.toString(),
       },
+
+    }, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem("token")
       }
@@ -310,23 +316,31 @@ const Page = () => {
                 value={values.search}
               />
             </Grid>
-            <TingkatKehadiranTable
-              hasil={hasil}
-              hasilMor={hasilMor}
-              hasilAkhir={hasilAkhir}
-              setHasil={handleHasil}
-              setHasilMor={setHasilMor}
-              setHasilAkhir={setHasilAkhir}
-              count={count}
-              items={dataResult}
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              page={page}
-              rowsPerPage={rowsPerPage}
-              confirm={confirmPerubahan}
-              setUserId={setUserId}
-              setTingkatKehadiranId={setTingkatKehadiranId}
-            />
+            {isLoading ? (
+              <>
+                <div style={{ display: "flex", justifyContent: "center", paddingTop: "120px" }}>
+                  <CircularProgress style={{ color: "#122647", width: "40px" }} />
+                </div>
+              </>
+            ) : (
+              <TingkatKehadiranTable
+                hasil={hasil}
+                hasilMor={hasilMor}
+                hasilAkhir={hasilAkhir}
+                setHasil={handleHasil}
+                setHasilMor={setHasilMor}
+                setHasilAkhir={setHasilAkhir}
+                count={count}
+                items={dataResult}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleRowsPerPageChange}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                confirm={confirmPerubahan}
+                setUserId={setUserId}
+                setTingkatKehadiranId={setTingkatKehadiranId}
+              />
+            )}
           </Stack>
         </Container>
       </Box>
