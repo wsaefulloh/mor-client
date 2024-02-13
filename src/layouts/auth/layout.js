@@ -77,7 +77,7 @@ export const Layout = (props) => {
                 sx={{ color: 'yellow' }}
                 target="_blank"
               >
-                Monthly Operation Report
+                Monthly Operator Report
               </Box>
             </Typography>
           </Box>
