@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { config } from '../helpers/constant';
 import { DatabaseKaryawanTable } from '../sections/table/database-karyawan-table';
 import { useRouter } from 'next/router';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const month = [
   {
@@ -72,6 +73,7 @@ const Page = () => {
   });
 
   const [listYear, setListYear] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -99,13 +101,12 @@ const Page = () => {
   );
 
   const getTingkatKehadiran = async (page, size, month, year, search_name) => {
-    let dataUser
+    setIsLoading(true)
     await axios.get(`${config.baseURL}/api/serve-data/database-user?page=${Number(page) + 1}&size=${size}&month=${month}&year=${year}&search_name=${search_name}`, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem("token")
       }
     }).then((res) => {
-      dataUser = res
       setDataResult(res.data.data.data.data)
       setCount(res.data.data.data.itemCount)
     }).catch((err) => {
@@ -114,7 +115,7 @@ const Page = () => {
         localStorage.clear();
       }
     })
-    console.log(dataUser)
+    setIsLoading(false)
   };
 
   useEffect(() => {
@@ -221,14 +222,23 @@ const Page = () => {
                 value={values.search}
               />
             </Grid>
-            <DatabaseKaryawanTable
-              count={count}
-              items={dataResult}
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              page={page}
-              rowsPerPage={rowsPerPage}
-            />
+            {isLoading ? (
+              <>
+                <div style={{ display: "flex", justifyContent: "center", paddingTop: "120px" }}>
+                  <CircularProgress style={{ color: "#122647", width: "40px" }} />
+                </div>
+              </>
+            ) : (
+              <DatabaseKaryawanTable
+                count={count}
+                items={dataResult}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleRowsPerPageChange}
+                page={page}
+                rowsPerPage={rowsPerPage}
+              />
+            )}
+
           </Stack>
         </Container>
       </Box>

@@ -7,11 +7,14 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { config } from '../helpers/constant';
 import { useRouter } from 'next/router';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Page = () => {
   const [detailUser, setDetailUser] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   const getUser = async () => {
+    setIsLoading(true)
     await axios.get(`${config.baseURL}/api/users/${localStorage.getItem("user_id")}`, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem("token")
@@ -25,6 +28,7 @@ const Page = () => {
       }
       console.log(err)
     })
+    setIsLoading(false)
   };
 
   const router = useRouter();
@@ -51,35 +55,46 @@ const Page = () => {
           py: 8
         }}
       >
-        <Container maxWidth="xl">
-          <Stack spacing={3}>
-            <div>
-              <Typography variant="h4"
-                sx={{ mb: 1 }}>
-                Account
-              </Typography>
-              <Typography variant="h8">
-                Welcome, {`${detailUser?.name}`}
-              </Typography>
+        {isLoading ? (
+          <>
+            <div style={{ display: "flex", justifyContent: "center", paddingTop: "120px" }}>
+              <CircularProgress style={{ color: "#122647", width: "40px" }} />
             </div>
-            <div>
-              <Grid
-                container
-                spacing={3}
-                sx={{ mb: 3 }}
-              >
-                <Grid
-                  xs={12}
-                  md={12}
-                  lg={12}
-                >
-                  <AccountProfileDetails name={detailUser?.name}
-                    nrp={detailUser?.nrp ?? "-"} />
-                </Grid>
-              </Grid>
-            </div>
-          </Stack>
-        </Container>
+          </>
+        ) : (
+          <>
+            <Container maxWidth="xl">
+              <Stack spacing={3}>
+                <div>
+                  <Typography variant="h4"
+                    sx={{ mb: 1 }}>
+                    Account
+                  </Typography>
+                  <Typography variant="h8">
+                    Welcome, {`${detailUser?.name}`}
+                  </Typography>
+                </div>
+                <div>
+                  <Grid
+                    container
+                    spacing={3}
+                    sx={{ mb: 3 }}
+                  >
+                    <Grid
+                      xs={12}
+                      md={12}
+                      lg={12}
+                    >
+                      <AccountProfileDetails name={detailUser?.name}
+                        nrp={detailUser?.nrp ?? "-"} />
+                    </Grid>
+                  </Grid>
+                </div>
+              </Stack>
+            </Container>
+          </>
+        )}
+
       </Box>
     </>
   )

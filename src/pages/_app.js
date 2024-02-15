@@ -8,6 +8,8 @@ import { useNProgress } from '../hooks/use-nprogress';
 import { createTheme } from '../theme';
 import { createEmotionCache } from '../utils/create-emotion-cache';
 import 'simplebar-react/dist/simplebar.min.css';
+import '../../public/assets/styles/custom.css'
+
 
 const clientSideEmotionCache = createEmotionCache();
 
