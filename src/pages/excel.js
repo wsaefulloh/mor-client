@@ -119,6 +119,7 @@ const Page = () => {
         text: "Something went wrong!",
       });
     }
+    setIsLoadingUpload(false)
   };
 
   const process = async () => {
@@ -139,7 +140,7 @@ const Page = () => {
           'Authorization': `Bearer ${tokenValue}`
         },
       })
-      if (response?.status === 200) {
+      if (response?.status === 200 || response?.status === 524) {
         Swal.fire({
           title: "Success",
           text: "Data Imported",
