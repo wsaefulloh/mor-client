@@ -146,14 +146,6 @@ const Page = () => {
           title: "Oops...",
           text: "Something went wrong!",
         });
-      } else {
-        Swal.fire({
-          title: "Success",
-          text: "Data Imported",
-          icon: "success"
-        }).then(() => {
-          router.reload()
-        });
       }
     } catch (error) {
       console.log(error)
@@ -163,6 +155,13 @@ const Page = () => {
       //   text: "Something went wrong!",
       // });
     }
+    Swal.fire({
+      title: "Success",
+      text: "Data Imported",
+      icon: "success"
+    }).then(() => {
+      router.reload()
+    });
     setIsLoadingProcess(false)
   };
 
