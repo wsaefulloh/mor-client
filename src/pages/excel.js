@@ -177,7 +177,7 @@ const Page = () => {
         router.push('/auth/login');
         localStorage.clear();
       }
-      console.log(err)
+      // console.log(err)
     })
   };
 
@@ -197,7 +197,7 @@ const Page = () => {
   }, [])
 
   useEffect(() => {
-    console.log(file)
+    // console.log(file)
     if (file) {
       setIsAvailableUpload(true)
     }

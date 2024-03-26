@@ -143,7 +143,7 @@ const Page = () => {
         router.push('/auth/login');
         localStorage.clear();
       }
-      console.log(err)
+      // console.log(err)
     })
     setIsLoading(false)
   };
@@ -165,14 +165,14 @@ const Page = () => {
         'Authorization': 'Bearer ' + localStorage.getItem("token")
       }
     }).then((res) => {
-      console.log(res)
+      // console.log(res)
       getTingkatKehadiran(page, rowsPerPage, values.month, values.year, values.search)
     }).catch((err) => {
       if (err.response.status === 401 || err.response.status === 401) {
         router.push('/auth/login');
         localStorage.clear();
       }
-      console.log(err)
+      // console.log(err)
     })
     return "OK"
   };
@@ -191,14 +191,14 @@ const Page = () => {
         'Authorization': 'Bearer ' + localStorage.getItem("token")
       }
     }).then((res) => {
-      console.log(res)
+      // console.log(res)
       getTingkatKehadiran(page, rowsPerPage, values.month, values.year, values.search)
     }).catch((err) => {
       if (err.response.status === 401 || err.response.status === 401) {
         router.push('/auth/login');
         localStorage.clear();
       }
-      console.log(err)
+      // console.log(err)
     })
     return "OK"
   };

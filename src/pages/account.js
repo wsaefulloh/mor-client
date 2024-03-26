@@ -26,7 +26,7 @@ const Page = () => {
         router.push('/auth/login');
         localStorage.clear();
       }
-      console.log(err)
+      // // console.log(err)
     })
     setIsLoading(false)
   };
