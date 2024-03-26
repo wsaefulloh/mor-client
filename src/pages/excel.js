@@ -140,7 +140,13 @@ const Page = () => {
           'Authorization': `Bearer ${tokenValue}`
         },
       })
-      if (response?.status === 200 || response?.status === 524) {
+      if (response?.status === 500) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
+      } else {
         Swal.fire({
           title: "Success",
           text: "Data Imported",
@@ -148,19 +154,14 @@ const Page = () => {
         }).then(() => {
           router.reload()
         });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Something went wrong!",
-        });
       }
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Something went wrong!",
-      });
+      console.log(error)
+      // Swal.fire({
+      //   icon: "error",
+      //   title: "Oops...",
+      //   text: "Something went wrong!",
+      // });
     }
     setIsLoadingProcess(false)
   };
