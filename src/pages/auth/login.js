@@ -12,9 +12,12 @@ import {
 import { Layout as AuthLayout } from '../../layouts/auth/layout';
 import axios from 'axios';
 import { config } from '../../helpers/constant';
+import CircularProgress from '@mui/material/CircularProgress';
+import { useState } from 'react';
 
 const Page = () => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false)
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -35,6 +38,7 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       try {
         // await auth.signIn(values.email, values.password);
+        setIsLoading(true)
         await axios.post(`${config.baseURL}/api/serve-data/login
         `, {
           email: values.email,
@@ -55,6 +59,7 @@ const Page = () => {
           helpers.setStatus({ success: false });
           helpers.setErrors({ submit: "Login gagal" });
           helpers.setSubmitting(false);
+          setIsLoading(false)
         })
         // router.push('/account');
       } catch (err) {
@@ -67,11 +72,6 @@ const Page = () => {
 
   return (
     <>
-      <Head>
-        <title>
-          Login
-        </title>
-      </Head>
       <Box
         sx={{
           backgroundColor: 'background.paper',
@@ -94,7 +94,7 @@ const Page = () => {
               spacing={1}
               sx={{ mb: 3 }}
             >
-              <Typography variant="h4">
+              <Typography variant="h5">
                 Login
               </Typography>
             </Stack>
@@ -148,7 +148,13 @@ const Page = () => {
                 type="submit"
                 variant="contained"
               >
-                Continue
+                {isLoading ? (
+                  <CircularProgress style={{ width: "30px", height: "30px", color: "#FFFFFF" }} color="secondary" />
+                ) : (
+                  <>
+                    Continue
+                  </>
+                )}
               </Button>
             </form>
           </div>

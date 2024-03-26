@@ -32,6 +32,15 @@ export const items = () => {
         )
       },
       {
+        title: 'Upload Excel',
+        path: '/excel',
+        icon: (
+          <SvgIcon fontSize="small">
+            <UserPlusIcon />
+          </SvgIcon>
+        )
+      },
+      {
         title: 'Tingkat Kehadiran (ATR)',
         path: '/tingkat-kehadiran',
         icon: (

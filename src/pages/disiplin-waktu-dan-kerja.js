@@ -208,7 +208,12 @@ const Page = () => {
 
   useEffect(() => {
     getTingkatKehadiran(page, rowsPerPage, values.month, values.year, values.search)
-  }, [page, rowsPerPage, values])
+  }, [page, rowsPerPage])
+
+  useEffect(() => {
+    setPage(0)
+    getTingkatKehadiran(0, rowsPerPage, values.month, values.year, values.search)
+  }, [values])
 
   const router = useRouter();
 
@@ -248,7 +253,7 @@ const Page = () => {
               spacing={4}
             >
               <Stack spacing={1}>
-                <Typography variant="h4">
+                <Typography variant="h5">
                   Tepat Waktu dan Disiplin Kerja
                 </Typography>
               </Stack>
@@ -313,29 +318,22 @@ const Page = () => {
                 value={values.search}
               />
             </Grid>
-            {isLoading ? (
-              <>
-                <div style={{ display: "flex", justifyContent: "center", paddingTop: "120px" }}>
-                  <CircularProgress style={{ color: "#122647", width: "40px" }} />
-                </div>
-              </>
-            ) : (
-              <DisiplinWaktuTable
-                hasilMor={hasilMor}
-                hasilAkhir={hasilAkhir}
-                setHasilMor={handleHasil}
-                setHasilAkhir={setHasilAkhir}
-                count={count}
-                items={dataResult}
-                onPageChange={handlePageChange}
-                onRowsPerPageChange={handleRowsPerPageChange}
-                page={page}
-                rowsPerPage={rowsPerPage}
-                confirm={confirmPerubahan}
-                setUserId={setUserId}
-                setDisiplinWaktuId={setDisiplinWaktuId}
-              />
-            )}
+            <DisiplinWaktuTable
+              isLoading={isLoading}
+              hasilMor={hasilMor}
+              hasilAkhir={hasilAkhir}
+              setHasilMor={handleHasil}
+              setHasilAkhir={setHasilAkhir}
+              count={count}
+              items={dataResult}
+              onPageChange={handlePageChange}
+              onRowsPerPageChange={handleRowsPerPageChange}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              confirm={confirmPerubahan}
+              setUserId={setUserId}
+              setDisiplinWaktuId={setDisiplinWaktuId}
+            />
           </Stack>
         </Container>
       </Box>

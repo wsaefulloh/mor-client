@@ -1,6 +1,6 @@
 const getTingkatKehadiranCalculate = (hasil) => {
 
-    let newHasil = Number(hasil).toFixed(2)
+    let newHasil = Number(hasil).toFixed(1)
     let result_mor
     let result
 

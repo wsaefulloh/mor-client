@@ -65,7 +65,7 @@ export const Layout = (props) => {
               align="center"
               color="inherit"
               sx={{
-                fontSize: '54px',
+                fontSize: '40px',
                 // lineHeight: '32px',
                 mb: 1
               }}

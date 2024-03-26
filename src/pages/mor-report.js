@@ -120,7 +120,12 @@ const Page = () => {
 
   useEffect(() => {
     getTingkatKehadiran(page, rowsPerPage, values.month, values.year, values.search)
-  }, [page, rowsPerPage, values])
+  }, [page, rowsPerPage])
+
+  useEffect(() => {
+    setPage(0)
+    getTingkatKehadiran(0, rowsPerPage, values.month, values.year, values.search)
+  }, [values])
 
   useEffect(() => {
     let listYearArray = []
@@ -157,7 +162,7 @@ const Page = () => {
               spacing={4}
             >
               <Stack spacing={1}>
-                <Typography variant="h4">
+                <Typography variant="h5">
                   MOR Report
                 </Typography>
               </Stack>

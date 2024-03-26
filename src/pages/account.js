@@ -66,11 +66,11 @@ const Page = () => {
             <Container maxWidth="xl">
               <Stack spacing={3}>
                 <div>
-                  <Typography variant="h4"
+                  <Typography variant="h5"
                     sx={{ mb: 1 }}>
                     Account
                   </Typography>
-                  <Typography variant="h8">
+                  <Typography variant="h7">
                     Welcome, {`${detailUser?.name}`}
                   </Typography>
                 </div>
