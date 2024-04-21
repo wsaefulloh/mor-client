@@ -51,28 +51,40 @@ export const DisiplinWaktuTable = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>
-                </TableCell>
-                <TableCell>
+                {/* <TableCell>
+                </TableCell> */}
+                <TableCell sx={{ minWidth: 150 }}>
                   Nama
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
                   NRP
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
                   Jabatan
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
                   Versatility
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
                   Grade
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
                   Nilai Mor
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
                   Nilai Akhir
+                </TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
+                  Created At
+                </TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
+                  Updated At
+                </TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
+                  Created By
+                </TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
+                  Updated By
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -84,6 +96,18 @@ export const DisiplinWaktuTable = (props) => {
                       hover
                       key={`skeleton_${x}`}
                     >
+                      {/* <TableCell>
+                        <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+                      </TableCell> */}
+                      <TableCell>
+                        <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+                      </TableCell>
                       <TableCell>
                         <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
                       </TableCell>
@@ -122,7 +146,7 @@ export const DisiplinWaktuTable = (props) => {
                       hover
                       key={customer.id}
                     >
-                      <TableCell>
+                      {/* <TableCell>
                         <Stack
                           alignItems="center"
                           direction="row"
@@ -147,7 +171,7 @@ export const DisiplinWaktuTable = (props) => {
                             Update
                           </Button>
                         </Stack>
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell>
                         <Stack
                           alignItems="center"
@@ -176,6 +200,18 @@ export const DisiplinWaktuTable = (props) => {
                       </TableCell>
                       <TableCell>
                         {customer.nilai_akhir}
+                      </TableCell>
+                      <TableCell>
+                        {new Date(`${customer.created_at}`).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        {new Date(`${customer.updated_at}`).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        {customer.created_by}
+                      </TableCell>
+                      <TableCell>
+                        {customer.updated_by}
                       </TableCell>
                     </TableRow>
                   );

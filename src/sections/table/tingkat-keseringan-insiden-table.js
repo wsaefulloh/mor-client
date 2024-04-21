@@ -46,6 +46,8 @@ export const TingkatKeseringanInsidenTable = (props) => {
   const [namaSelected, setNamaSelected] = useState("");
   const [nrpSelected, setNrpSelected] = useState("");
 
+  let auth = localStorage.getItem("role")
+
   return (
     <Card>
       <Scrollbar>
@@ -53,31 +55,44 @@ export const TingkatKeseringanInsidenTable = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>
-                </TableCell>
-                <TableCell>
+                {auth === "Admin" &&
+                  <TableCell>
+                  </TableCell>}
+                <TableCell sx={{ minWidth: 150 }}>
                   Nama
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
                   NRP
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
                   Jabatan
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
                   Versatility
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
                   Grade
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
                   Hasil
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
                   Nilai Mor
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
                   Nilai Akhir
+                </TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
+                  Created At
+                </TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
+                  Updated At
+                </TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
+                  Created By
+                </TableCell>
+                <TableCell sx={{ minWidth: 150 }}>
+                  Updated By
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -89,6 +104,22 @@ export const TingkatKeseringanInsidenTable = (props) => {
                       hover
                       key={`skeleton_${x}`}
                     >
+                      {auth === "Admin" &&
+                        <TableCell>
+                          <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+                        </TableCell>}
+                      <TableCell>
+                        <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+                      </TableCell>
                       <TableCell>
                         <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
                       </TableCell>
@@ -130,33 +161,34 @@ export const TingkatKeseringanInsidenTable = (props) => {
                       hover
                       key={customer.id}
                     >
-                      <TableCell>
-                        <Stack
-                          alignItems="center"
-                          direction="row"
-                          spacing={2}
-                        >
-                          <Button
-                            sx={{
-                              mt: 3, backgroundColor: '#122647',
-                              color: '#ffffff', '&:hover': {
-                                color: '#122647',
-                              },
-                            }}
-                            onClick={() => {
-                              setOpen(true)
-                              setNamaSelected(customer.name)
-                              setNrpSelected(customer.nrp)
-                              setHasil(customer.hasil)
-                              setHasilAkhir(customer.hasil_akhir)
-                              setHasilMor(customer.hasil_mor)
-                              setUserId(customer.user_id)
-                              setKeseringanInsidenId(customer.keseringan_insiden_id)
-                            }}>
-                            Update
-                          </Button>
-                        </Stack>
-                      </TableCell>
+                      {auth === "Admin" &&
+                        <TableCell>
+                          <Stack
+                            alignItems="center"
+                            direction="row"
+                            spacing={2}
+                          >
+                            <Button
+                              sx={{
+                                mt: 3, backgroundColor: '#122647',
+                                color: '#ffffff', '&:hover': {
+                                  color: '#122647',
+                                },
+                              }}
+                              onClick={() => {
+                                setOpen(true)
+                                setNamaSelected(customer.name)
+                                setNrpSelected(customer.nrp)
+                                setHasil(customer.hasil)
+                                setHasilAkhir(customer.hasil_akhir)
+                                setHasilMor(customer.hasil_mor)
+                                setUserId(customer.user_id)
+                                setKeseringanInsidenId(customer.keseringan_insiden_id)
+                              }}>
+                              Update
+                            </Button>
+                          </Stack>
+                        </TableCell>}
                       <TableCell>
                         <Stack
                           alignItems="center"
@@ -188,6 +220,18 @@ export const TingkatKeseringanInsidenTable = (props) => {
                       </TableCell>
                       <TableCell>
                         {customer.nilai_akhir}
+                      </TableCell>
+                      <TableCell>
+                        {new Date(`${customer.created_at}`).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        {new Date(`${customer.updated_at}`).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        {customer.created_by}
+                      </TableCell>
+                      <TableCell>
+                        {customer.updated_by}
                       </TableCell>
                     </TableRow>
                   );

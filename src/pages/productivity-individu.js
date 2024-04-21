@@ -143,6 +143,10 @@ const Page = () => {
         user_name: {
           connect: [{ id: Number(params.user_id) }]
         },
+        created_by_id_user: Number(localStorage.getItem("user_id")),
+        updated_by_id_user: Number(localStorage.getItem("user_id")),
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     }, {
       headers: {
@@ -169,6 +173,8 @@ const Page = () => {
         nilai_akhir: params.nilai_akhir,
         bulan: params.bulan,
         tahun: params.tahun.toString(),
+        updated_by_id_user: Number(localStorage.getItem("user_id")),
+        updatedAt: new Date()
       }
     }, {
       headers: {

@@ -94,6 +94,14 @@ export const AccountProfileDetails = (props) => {
                     <OutlinedInput disabled={true} value={props.nrp} />
                   </FormControl>
                 </form>
+                <Typography sx={{ pb: 1, fontSize: 13, pt: 3 }}>
+                  Role
+                </Typography>
+                <form noValidate>
+                  <FormControl sx={{ width: '100%' }}>
+                    <OutlinedInput disabled={true} value={localStorage.getItem("role")} />
+                  </FormControl>
+                </form>
               </Grid>
             </Grid>
           </Box>

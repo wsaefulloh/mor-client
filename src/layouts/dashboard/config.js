@@ -20,6 +20,81 @@ export const items = () => {
         </SvgIcon>
       )
     },]
+  } else if (auth == "Print Only") {
+    return [
+      {
+        title: 'Account',
+        path: '/account',
+        icon: (
+          <SvgIcon fontSize="small">
+            <UserIcon />
+          </SvgIcon>
+        )
+      },
+      {
+        title: 'Tingkat Kehadiran (ATR)',
+        path: '/tingkat-kehadiran',
+        icon: (
+          <SvgIcon fontSize="small">
+            <ChartBarIcon />
+          </SvgIcon>
+        )
+      },
+      {
+        title: 'Disiplin Waktu dan Kerja',
+        path: '/disiplin-waktu-dan-kerja',
+        icon: (
+          <SvgIcon fontSize="small">
+            <UsersIcon />
+          </SvgIcon>
+        )
+      },
+      {
+        title: 'Pencapaian Hours Meter',
+        path: '/hours-meter',
+        icon: (
+          <SvgIcon fontSize="small">
+            <ShoppingBagIcon />
+          </SvgIcon>
+        )
+      },
+      {
+        title: 'Productivity Individu',
+        path: '/productivity-individu',
+        icon: (
+          <SvgIcon fontSize="small">
+            <CogIcon />
+          </SvgIcon>
+        )
+      },
+      {
+        title: 'Tingkat Keseringan Insiden',
+        path: '/tingkat-keseringan-insiden',
+        icon: (
+          <SvgIcon fontSize="small">
+            <LockClosedIcon />
+          </SvgIcon>
+        )
+      },
+      {
+        title: 'Hazard Report',
+        path: '/hazard-report',
+        icon: (
+          <SvgIcon fontSize="small">
+            <ChartBarIcon />
+          </SvgIcon>
+        )
+      },
+      {
+        title: 'MOR Report',
+        path: '/mor-report',
+        icon: (
+          <SvgIcon fontSize="small">
+            <UserPlusIcon />
+          </SvgIcon>
+        )
+      },
+    ]
   } else {
     return [
       {
@@ -37,6 +112,15 @@ export const items = () => {
         icon: (
           <SvgIcon fontSize="small">
             <UserPlusIcon />
+          </SvgIcon>
+        )
+      },
+      {
+        title: 'Status Import Documents',
+        path: '/status-document',
+        icon: (
+          <SvgIcon fontSize="small">
+            <CogIcon />
           </SvgIcon>
         )
       },

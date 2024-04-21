@@ -9,6 +9,7 @@ import { getTingkatKehadiranCalculate } from '../helpers/calculate-tingkat-kehad
 import { config } from '../helpers/constant';
 import { useRouter } from 'next/router';
 import CircularProgress from '@mui/material/CircularProgress';
+import { getDisiplinCalculate } from '../helpers/calculate-disiplin';
 
 const month = [
   {
@@ -79,6 +80,7 @@ const Page = () => {
   const [hasilAkhir, setHasilAkhir] = useState(0);
   const [userId, setUserId] = useState(0);
   const [tingkatKehadiranId, setTingkatKehadiranId] = useState(0);
+  const [disiplinWaktuId, setDisiplinWaktuId] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleHasil = (e) => {
@@ -143,6 +145,10 @@ const Page = () => {
         user_name: {
           connect: [{ id: Number(params.user_id) }]
         },
+        created_by_id_user: Number(localStorage.getItem("user_id")),
+        updated_by_id_user: Number(localStorage.getItem("user_id")),
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
     }, {
       headers: {
@@ -169,8 +175,69 @@ const Page = () => {
         nilai_akhir: params.nilai_akhir,
         bulan: params.bulan,
         tahun: params.tahun.toString(),
+        updated_by_id_user: Number(localStorage.getItem("user_id")),
+        updatedAt: new Date()
       },
 
+    }, {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem("token")
+      }
+    }).then((res) => {
+      // console.log(res)
+      getTingkatKehadiran(page, rowsPerPage, values.month, values.year, values.search)
+    }).catch((err) => {
+      if (err.response.status === 401 || err.response.status === 401) {
+        router.push('/auth/login');
+        localStorage.clear();
+      }
+      // console.log(err)
+    })
+    return "OK"
+  };
+
+  const createDisiplin = async (params) => {
+    await axios.post(`${config.baseURL}/api/disiplin-kerjas`, {
+      "data": {
+        nilai_mor: params.nilai_mor,
+        nilai_akhir: params.nilai_akhir,
+        bulan: params.bulan,
+        tahun: params.tahun.toString(),
+        user_name: {
+          connect: [{ id: Number(params.user_id) }]
+        },
+        created_by_id_user: Number(localStorage.getItem("user_id")),
+        updated_by_id_user: Number(localStorage.getItem("user_id")),
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    }, {
+      headers: {
+        'Authorization': 'Bearer ' + localStorage.getItem("token")
+      }
+    }).then((res) => {
+      // console.log(res)
+      getTingkatKehadiran(page, rowsPerPage, values.month, values.year, values.search)
+    }).catch((err) => {
+      if (err.response.status === 401 || err.response.status === 401) {
+        router.push('/auth/login');
+        localStorage.clear();
+      }
+      // console.log(err)
+    })
+    return "OK"
+  };
+
+  const updateDisiplin = async (params) => {
+    await axios.put(`${config.baseURL}/api/disiplin-kerjas/${params.id}`, {
+      "data": {
+        nilai_mor: params.nilai_mor,
+        nilai_akhir: params.nilai_akhir,
+        bulan: params.bulan,
+        tahun: params.tahun.toString(),
+        updated_by_id_user: Number(localStorage.getItem("user_id")),
+        updatedAt: new Date()
+      }
     }, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem("token")
@@ -198,12 +265,34 @@ const Page = () => {
         tahun: values.year,
         user_id: userId
       })
+
+      let { result_mor, result } = getDisiplinCalculate(hasil)
+
+      await createDisiplin({
+        nilai_mor: result_mor,
+        nilai_akhir: result,
+        bulan: values.month,
+        tahun: values.year,
+        user_id: userId
+      })
+
     } else {
       await updateTingkatKehadiran({
         id: tingkatKehadiranId,
         hasil: hasil,
         nilai_mor: hasilMor,
         nilai_akhir: hasilAkhir,
+        bulan: values.month,
+        tahun: values.year
+      })
+
+      let { result_mor, result } = getDisiplinCalculate(hasil)
+      console.log(hasil)
+
+      await updateDisiplin({
+        id: disiplinWaktuId,
+        nilai_mor: result_mor,
+        nilai_akhir: result,
         bulan: values.month,
         tahun: values.year
       })
@@ -364,6 +453,7 @@ const Page = () => {
               confirm={confirmPerubahan}
               setUserId={setUserId}
               setTingkatKehadiranId={setTingkatKehadiranId}
+              setDisiplinWaktuId={setDisiplinWaktuId}
             />
           </Stack>
         </Container>

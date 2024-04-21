@@ -44,17 +44,18 @@ const Page = () => {
           email: values.email,
           password: values.password,
         }).then((res) => {
-          if (res.data.data[0].name === "Admin") {
-            localStorage.setItem("auth", true)
-            localStorage.setItem("role", res.data.data[0].name)
-            localStorage.setItem("user_id", res.data.data[0].user_id)
-            localStorage.setItem("token", res.data.token)
-            router.push('/account');
-          } else {
-            helpers.setStatus({ success: false });
-            helpers.setErrors({ submit: "Anda bukan Admin" });
-            helpers.setSubmitting(false);
-          }
+          // if (res.data.data[0].name === "Admin") {
+
+          // } else {
+          //   helpers.setStatus({ success: false });
+          //   helpers.setErrors({ submit: "Anda bukan Admin" });
+          //   helpers.setSubmitting(false);
+          // }
+          localStorage.setItem("auth", true)
+          localStorage.setItem("role", res.data.data[0].name)
+          localStorage.setItem("user_id", res.data.data[0].user_id)
+          localStorage.setItem("token", res.data.token)
+          router.push('/account');
         }).catch((err) => {
           helpers.setStatus({ success: false });
           helpers.setErrors({ submit: "Login gagal" });

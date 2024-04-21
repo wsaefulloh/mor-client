@@ -149,19 +149,21 @@ const Page = () => {
       }
     } catch (error) {
       console.log(error)
-      // Swal.fire({
-      //   icon: "error",
-      //   title: "Oops...",
-      //   text: "Something went wrong!",
-      // });
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
     }
     Swal.fire({
       title: "Success",
       text: "Data Imported",
       icon: "success"
-    }).then(() => {
-      router.reload()
-    });
+    })
+      .then(() => {
+        // router.reload()
+        router.push('/status-document');
+      });
     setIsLoadingProcess(false)
   };
 

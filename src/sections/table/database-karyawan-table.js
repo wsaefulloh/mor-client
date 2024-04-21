@@ -1348,10 +1348,12 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                       style={{
                         fontSize: 20,
                         fontWeight: 900,
-                        height: 100,
+                        height: 20,
                         border: "unset"
                       }}
-                    />
+                    >
+                      <img width="150px" src={"../assets/Yogi Aditya Widodo.jpeg"} />
+                    </td>
                     <td
                       style={{
                         fontSize: 20,
@@ -1359,7 +1361,9 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                         height: 20,
                         border: "unset"
                       }}
-                    />
+                    >
+                      <img width="150px" src={"../assets/Ali Zakaria.jpeg"} />
+                    </td>
                   </tr>
                   <tr
                     style={{ border: "unset", textAlign: "left" }}
@@ -1372,7 +1376,7 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                         border: "unset"
                       }}
                     >
-                      <u>Septo Azis Irawan</u>
+                      <u>Yogi Aditya Widodo</u>
                     </td>
                     <td
                       style={{
@@ -1382,7 +1386,7 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                         border: "unset"
                       }}
                     >
-                      <u>Ega Prayoga</u>
+                      <u>Ali Zakaria</u>
                     </td>
                   </tr>
                   <tr
@@ -1406,7 +1410,7 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                         border: "unset"
                       }}
                     >
-                      OSPD Dept. Head
+                      Learning Academy Section Head
                     </td>
                   </tr>
                 </tbody>
