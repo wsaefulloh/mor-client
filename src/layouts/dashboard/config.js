@@ -40,39 +40,21 @@ export const items = () => {
           </SvgIcon>
         )
       },
-      {
-        title: 'Disiplin Waktu dan Kerja',
-        path: '/disiplin-waktu-dan-kerja',
-        icon: (
-          <SvgIcon fontSize="small">
-            <UsersIcon />
-          </SvgIcon>
-        )
-      },
+      // {
+      //   title: 'Disiplin Waktu dan Kerja',
+      //   path: '/disiplin-waktu-dan-kerja',
+      //   icon: (
+      //     <SvgIcon fontSize="small">
+      //       <UsersIcon />
+      //     </SvgIcon>
+      //   )
+      // },
       {
         title: 'Pencapaian Hours Meter',
         path: '/hours-meter',
         icon: (
           <SvgIcon fontSize="small">
             <ShoppingBagIcon />
-          </SvgIcon>
-        )
-      },
-      {
-        title: 'Productivity Individu',
-        path: '/productivity-individu',
-        icon: (
-          <SvgIcon fontSize="small">
-            <CogIcon />
-          </SvgIcon>
-        )
-      },
-      {
-        title: 'Tingkat Keseringan Insiden',
-        path: '/tingkat-keseringan-insiden',
-        icon: (
-          <SvgIcon fontSize="small">
-            <LockClosedIcon />
           </SvgIcon>
         )
       },
@@ -85,6 +67,24 @@ export const items = () => {
           </SvgIcon>
         )
       },
+      {
+        title: 'Surat Peringatan',
+        path: '/surat-peringatan',
+        icon: (
+          <SvgIcon fontSize="small">
+            <CogIcon />
+          </SvgIcon>
+        )
+      },
+      // {
+      //   title: 'Tingkat Keseringan Insiden',
+      //   path: '/tingkat-keseringan-insiden',
+      //   icon: (
+      //     <SvgIcon fontSize="small">
+      //       <LockClosedIcon />
+      //     </SvgIcon>
+      //   )
+      // },
       {
         title: 'MOR Report',
         path: '/mor-report',
@@ -133,15 +133,15 @@ export const items = () => {
           </SvgIcon>
         )
       },
-      {
-        title: 'Disiplin Waktu dan Kerja',
-        path: '/disiplin-waktu-dan-kerja',
-        icon: (
-          <SvgIcon fontSize="small">
-            <UsersIcon />
-          </SvgIcon>
-        )
-      },
+      // {
+      //   title: 'Disiplin Waktu dan Kerja',
+      //   path: '/disiplin-waktu-dan-kerja',
+      //   icon: (
+      //     <SvgIcon fontSize="small">
+      //       <UsersIcon />
+      //     </SvgIcon>
+      //   )
+      // },
       {
         title: 'Pencapaian Hours Meter',
         path: '/hours-meter',
@@ -151,30 +151,39 @@ export const items = () => {
           </SvgIcon>
         )
       },
-      {
-        title: 'Productivity Individu',
-        path: '/productivity-individu',
-        icon: (
-          <SvgIcon fontSize="small">
-            <CogIcon />
-          </SvgIcon>
-        )
-      },
-      {
-        title: 'Tingkat Keseringan Insiden',
-        path: '/tingkat-keseringan-insiden',
-        icon: (
-          <SvgIcon fontSize="small">
-            <LockClosedIcon />
-          </SvgIcon>
-        )
-      },
+      // {
+      //   title: 'Productivity Individu',
+      //   path: '/productivity-individu',
+      //   icon: (
+      //     <SvgIcon fontSize="small">
+      //       <CogIcon />
+      //     </SvgIcon>
+      //   )
+      // },
+      // {
+      //   title: 'Tingkat Keseringan Insiden',
+      //   path: '/tingkat-keseringan-insiden',
+      //   icon: (
+      //     <SvgIcon fontSize="small">
+      //       <LockClosedIcon />
+      //     </SvgIcon>
+      //   )
+      // },
       {
         title: 'Hazard Report',
         path: '/hazard-report',
         icon: (
           <SvgIcon fontSize="small">
             <ChartBarIcon />
+          </SvgIcon>
+        )
+      },
+      {
+        title: 'Surat Peringatan',
+        path: '/surat-peringatan',
+        icon: (
+          <SvgIcon fontSize="small">
+            <CogIcon />
           </SvgIcon>
         )
       },

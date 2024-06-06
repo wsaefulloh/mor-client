@@ -22,7 +22,7 @@ import Button from "@mui/material/Button";
 import CustomizedDialogsProductivityIndividu from '../modals/modals-productivity-individu';
 import Skeleton from '@mui/material/Skeleton';
 
-export const ProductivityIndividuTable = (props) => {
+export const SuratPeringatanTable = (props) => {
   const {
     count = 0,
     items = [],
@@ -30,21 +30,26 @@ export const ProductivityIndividuTable = (props) => {
     onRowsPerPageChange,
     page = 0,
     rowsPerPage = 0,
-    hasil,
-    hasilMor,
-    hasilAkhir,
-    setHasil,
-    setHasilMor,
-    setHasilAkhir,
-    confirm,
-    setUserId,
-    setProductivityIndividuId,
     isLoading
   } = props;
 
-  const [open, setOpen] = useState(false);
-  const [namaSelected, setNamaSelected] = useState("");
-  const [nrpSelected, setNrpSelected] = useState("");
+  let getStatus = (date) => {
+    if (date.length !== 0 && date !== "Invalid Date") {
+      let dateNow = new Date().toISOString().slice(0, 10).split("-")
+      let endDate = date.split("/")
+      if (Number(endDate[2]) > Number(dateNow[0])) {
+        return "AKTIF"
+      } else if (Number(endDate[2]) == Number(dateNow[0]) && Number(endDate[1]) > Number(dateNow[1])) {
+        return "AKTIF"
+      } else if (Number(endDate[2]) == Number(dateNow[0]) && Number(endDate[1]) == Number(dateNow[1]) && Number(endDate[0]) > Number(dateNow[2])) {
+        return "AKTIF"
+      } else {
+        return "NON-AKTIF"
+      }
+    } else {
+      return "-"
+    }
+  }
 
   let auth = localStorage.getItem("role")
 
@@ -74,25 +79,19 @@ export const ProductivityIndividuTable = (props) => {
                   Grade
                 </TableCell>
                 <TableCell sx={{ minWidth: 150 }}>
-                  Hasil
+                  Jenis SP
                 </TableCell>
                 <TableCell sx={{ minWidth: 150 }}>
-                  Nilai Mor
+                  Tanggal Mulai
                 </TableCell>
                 <TableCell sx={{ minWidth: 150 }}>
-                  Nilai Akhir
+                  Tanggal Berakhir
+                </TableCell>
+                <TableCell sx={{ minWidth: 250 }}>
+                  Pasal Pelanggaran
                 </TableCell>
                 <TableCell sx={{ minWidth: 150 }}>
-                  Created At
-                </TableCell>
-                <TableCell sx={{ minWidth: 150 }}>
-                  Updated At
-                </TableCell>
-                <TableCell sx={{ minWidth: 150 }}>
-                  Created By
-                </TableCell>
-                <TableCell sx={{ minWidth: 150 }}>
-                  Updated By
+                  Status
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -108,12 +107,6 @@ export const ProductivityIndividuTable = (props) => {
                         <TableCell>
                           <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
                         </TableCell>}
-                      <TableCell>
-                        <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
-                      </TableCell>
-                      <TableCell>
-                        <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
-                      </TableCell>
                       <TableCell>
                         <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
                       </TableCell>
@@ -160,31 +153,7 @@ export const ProductivityIndividuTable = (props) => {
                     >
                       {auth === "Admin" &&
                         <TableCell>
-                          <Stack
-                            alignItems="center"
-                            direction="row"
-                            spacing={2}
-                          >
-                            <Button
-                              sx={{
-                                mt: 3, backgroundColor: '#122647',
-                                color: '#ffffff', '&:hover': {
-                                  color: '#122647',
-                                },
-                              }}
-                              onClick={() => {
-                                setOpen(true)
-                                setNamaSelected(customer.name)
-                                setNrpSelected(customer.nrp)
-                                setHasil(customer.hasil)
-                                setHasilAkhir(customer.hasil_akhir)
-                                setHasilMor(customer.hasil_mor)
-                                setUserId(customer.user_id)
-                                setProductivityIndividuId(customer.productivity_individu_id)
-                              }}>
-                              Update
-                            </Button>
-                          </Stack>
+
                         </TableCell>}
                       <TableCell>
                         <Stack
@@ -210,25 +179,19 @@ export const ProductivityIndividuTable = (props) => {
                         {customer.grade}
                       </TableCell>
                       <TableCell>
-                        {customer.hasil}
+                        {customer.jenis_disiplin_report}
                       </TableCell>
                       <TableCell>
-                        {customer.nilai_mor}
+                        {customer.start_date}
                       </TableCell>
                       <TableCell>
-                        {customer.nilai_akhir}
+                        {customer.end_date}
                       </TableCell>
                       <TableCell>
-                        {new Date(`${customer.created_at}`).toLocaleDateString()}
+                        {customer.pasal_pelanggaran}
                       </TableCell>
                       <TableCell>
-                        {new Date(`${customer.updated_at}`).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>
-                        {customer.created_by}
-                      </TableCell>
-                      <TableCell>
-                        {customer.updated_by}
+                        {getStatus(customer.end_date)}
                       </TableCell>
                     </TableRow>
                   );
@@ -252,26 +215,16 @@ export const ProductivityIndividuTable = (props) => {
           rowsPerPageOptions={[5, 10, 25]}
         />
       )}
-
-      <CustomizedDialogsProductivityIndividu open={open} setOpen={setOpen} nama={namaSelected} nrp={nrpSelected} hasil={hasil} hasilMor={hasilMor} hasilAkhir={hasilAkhir} setHasil={setHasil} confirm={confirm} />
     </Card>
   );
 };
 
-ProductivityIndividuTable.propTypes = {
+SuratPeringatanTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onPageChange: PropTypes.func,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
-  hasil: PropTypes.any,
-  hasilMor: PropTypes.any,
-  hasilAkhir: PropTypes.any,
-  setHasil: PropTypes.any,
-  setHasilMor: PropTypes.any,
-  setHasilAkhir: PropTypes.any,
-  confirm: PropTypes.any,
-  setUserId: PropTypes.any,
-  setProductivityIndividuId: PropTypes.any,
+  isLoading: PropTypes.bool
 };

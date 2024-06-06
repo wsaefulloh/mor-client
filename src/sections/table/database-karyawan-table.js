@@ -21,11 +21,12 @@ import DialogContent from "@mui/material/DialogContent";
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
 import { color } from '@mui/system';
+import { getKeterangan } from '../../helpers/calculate-keterangan';
 
 function PrintPdf({ value, tglEfektif, tglEfektifString }) {
   const { toPDF, targetRef } = usePDF({ filename: `${value.name}/${value.nrp} - ${value.bulan}/${value.tahun}.pdf` });
-  const jumlahAkhir = (value.hazard_report_nilai_akhir + value.keseringan_insiden_nilai_akhir + value.productivity_individu_nilai_akhir + value.tingkat_kehadiran_nilai_akhir + value.hours_meter_nilai_akhir + value.disiplin_kerja_nilai_akhir).toFixed(2)
-  const kategori = jumlahAkhir >= 0 && jumlahAkhir <= 1.99 ? "K" : jumlahAkhir >= 2.00 && jumlahAkhir <= 2.99 ? "C" : jumlahAkhir >= 3.00 && jumlahAkhir <= 3.99 ? "B" : jumlahAkhir >= 4.00 && jumlahAkhir <= 4.75 ? "BS" : jumlahAkhir >= 4.76 && jumlahAkhir <= 10 ? "IST" : "error"
+  const jumlahAkhir = 1
+  const kategori = "K"
 
   const keterangan = (kategori) => {
     let result = kategori == "K" ? "Kurang" : kategori == "C" ? "Cukup" : kategori == "B" ? "Baik" : kategori == "BS" ? "Baik Sekali" : kategori == "IST" ? "Istimewa" : "error"
@@ -54,46 +55,6 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
   }])
   const [tglEfektifState, setTglEfektif] = React.useState(tglEfektif);
   const [tglEfektifStringState, setTglEfektifString] = React.useState(tglEfektifString);
-
-  const addPencapaian = () => {
-    let prev = pencapaianHourMeter
-    let init = [{
-      alatEquipment: "",
-      periode: "",
-      shift: "",
-      hourMeter: ""
-    }]
-    prev = prev.concat(init)
-    setPencapaianHourMeter(prev)
-  }
-
-  const deletePencapaian = (index) => {
-    let prev = pencapaianHourMeter
-    if (index > -1) {
-      prev.splice(index, 1)
-    }
-    prev = prev.concat([])
-    setPencapaianHourMeter(prev)
-  }
-
-  const addRencana = () => {
-    let prev = rencanaTraining
-    let init = [{
-      tglBulan: "",
-      JenisTraining: "",
-    }]
-    prev = prev.concat(init)
-    setRencanaTraining(prev)
-  }
-
-  const deleteRencana = (index) => {
-    let prev = rencanaTraining
-    if (index > -1) {
-      prev.splice(index, 1)
-    }
-    prev = prev.concat([])
-    setRencanaTraining(prev)
-  }
 
   return (
     <>
@@ -184,280 +145,10 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
             </Grid>
           </div>
         </>
-      ) : page === 2 ? (
-        <>
-          <button style={{ marginTop: '40px', marginLeft: '50px', width: "200px", padding: "10px" }}
-            onClick={() => setPage(1)}>Previous</button>
-          <button style={{ marginTop: '40px', marginLeft: '50px', width: "200px", padding: "10px" }}
-            onClick={() => setPage(3)}>Next</button>
-          <div style={{ width: "95%", display: "flex", justifyContent: "space-between", marginTop: '40px', marginLeft: '50px', }}>
-            <div style={{ width: "100%", paddingRight: "20px" }}>
-              <div style={{ marginBottom: "10px", fontWeight: "900" }}>List Pencapaian Hour Meter</div>
-              {pencapaianHourMeter.map((e, index) => {
-                return (
-                  <>
-                    <div style={{ border: "1px solid black", padding: "30px", marginBottom: "30px" }}>
-                      <Grid
-                        xs={12}
-                        md={6}
-                        sx={{ pb: 3 }}
-                      >
-                        <Typography sx={{ pb: 1, fontSize: 13 }}>
-                          Alat / Equipment
-                        </Typography>
-                        <form noValidate>
-                          <FormControl sx={{ width: '100%' }}>
-                            <OutlinedInput
-                              onChange={(ev) => {
-                                let pencapaian = pencapaianHourMeter.concat([])
-                                pencapaian[index] = {
-                                  ...e,
-                                  alatEquipment: ev.target.value
-                                }
-                                setPencapaianHourMeter(pencapaian)
-                              }}
-                              value={pencapaianHourMeter[index].alatEquipment}
-                            />
-                          </FormControl>
-                        </form>
-                      </Grid>
-                      <Grid
-                        xs={12}
-                        md={6}
-                        sx={{ pb: 3 }}
-                      >
-                        <Typography sx={{ pb: 1, fontSize: 13 }}>
-                          Periode
-                        </Typography>
-                        <form noValidate>
-                          <FormControl sx={{ width: '100%' }}>
-                            <OutlinedInput
-                              onChange={(ev) => {
-                                let pencapaian = pencapaianHourMeter.concat([])
-                                pencapaian[index] = {
-                                  ...e,
-                                  periode: ev.target.value
-                                }
-                                setPencapaianHourMeter(pencapaian)
-                              }}
-                              value={pencapaianHourMeter[index].periode}
-                            />
-                          </FormControl>
-                        </form>
-                      </Grid>
-                      <Grid
-                        xs={12}
-                        md={6}
-                        sx={{ pb: 3 }}
-                      >
-                        <Typography sx={{ pb: 1, fontSize: 13 }}>
-                          Shift
-                        </Typography>
-                        <form noValidate>
-                          <FormControl sx={{ width: '100%' }}>
-                            <OutlinedInput
-                              onChange={(ev) => {
-                                let pencapaian = pencapaianHourMeter.concat([])
-                                pencapaian[index] = {
-                                  ...e,
-                                  shift: ev.target.value
-                                }
-                                setPencapaianHourMeter(pencapaian)
-                              }}
-                              value={pencapaianHourMeter[index].shift}
-                            />
-                          </FormControl>
-                        </form>
-                      </Grid>
-                      <Grid
-                        xs={12}
-                        md={6}
-                        sx={{ pb: 3 }}
-                      >
-                        <Typography sx={{ pb: 1, fontSize: 13 }}>
-                          Hour Meter
-                        </Typography>
-                        <form noValidate>
-                          <FormControl sx={{ width: '100%' }}>
-                            <OutlinedInput
-                              onChange={(ev) => {
-                                let pencapaian = pencapaianHourMeter.concat([])
-                                pencapaian[index] = {
-                                  ...e,
-                                  hourMeter: ev.target.value
-                                }
-                                setPencapaianHourMeter(pencapaian)
-                              }}
-                              value={pencapaianHourMeter[index].hourMeter}
-                            />
-                          </FormControl>
-                        </form>
-                      </Grid>
-                      {pencapaianHourMeter.length > 1 ? (
-                        <button style={{ marginRight: "30px", width: "200px", padding: "10px" }}
-                          onClick={() => deletePencapaian(index)}>Delete</button>
-                      ) : (
-                        <></>
-                      )}
-                      <button style={{ width: "200px", padding: "10px" }}
-                        onClick={() => addPencapaian()}>Add</button>
-                    </div>
-
-                  </>
-
-                )
-              })
-              }
-              <div style={{ marginBottom: "10px", fontWeight: "900" }}>Total Pencapaian Hour Meter</div>
-              <div style={{ border: "1px solid black", padding: "30px", marginBottom: "30px" }}>
-                <Grid
-                  xs={12}
-                  md={6}
-                  sx={{ pb: 3 }}
-                >
-                  <Typography sx={{ pb: 1, fontSize: 13 }}>
-                    Total Periode
-                  </Typography>
-                  <form noValidate>
-                    <FormControl sx={{ width: '100%' }}>
-                      <OutlinedInput
-                        onChange={(ev) => {
-                          let pencapaian = pencapaianHourMeterTotal
-                          pencapaian = {
-                            ...pencapaian,
-                            periode: ev.target.value
-                          }
-                          setPencapaianHourMeterTotal(pencapaian)
-                        }}
-                        value={pencapaianHourMeterTotal.periode}
-                      />
-                    </FormControl>
-                  </form>
-                </Grid>
-                <Grid
-                  xs={12}
-                  md={6}
-                  sx={{ pb: 3 }}
-                >
-                  <Typography sx={{ pb: 1, fontSize: 13 }}>
-                    Total Shift
-                  </Typography>
-                  <form noValidate>
-                    <FormControl sx={{ width: '100%' }}>
-                      <OutlinedInput
-                        onChange={(ev) => {
-                          let pencapaian = pencapaianHourMeterTotal
-                          pencapaian = {
-                            ...pencapaian,
-                            shift: ev.target.value
-                          }
-                          setPencapaianHourMeterTotal(pencapaian)
-                        }}
-                        value={pencapaianHourMeterTotal.shift}
-                      />
-                    </FormControl>
-                  </form>
-                </Grid>
-                <Grid
-                  xs={12}
-                  md={6}
-                >
-                  <Typography sx={{ pb: 1, fontSize: 13 }}>
-                    Total Hour Meter
-                  </Typography>
-                  <form noValidate>
-                    <FormControl sx={{ width: '100%' }}>
-                      <OutlinedInput
-                        onChange={(ev) => {
-                          let pencapaian = pencapaianHourMeterTotal
-                          pencapaian = {
-                            ...pencapaian,
-                            hourMeter: ev.target.value
-                          }
-                          setPencapaianHourMeterTotal(pencapaian)
-                        }}
-                        value={pencapaianHourMeterTotal.hourMeter}
-                      />
-                    </FormControl>
-                  </form>
-                </Grid>
-              </div>
-            </div>
-            <div style={{ width: "100%", paddingLeft: "20px" }}>
-              <div style={{ marginBottom: "10px", fontWeight: "900" }}>List Rencana Training</div>
-              {rencanaTraining.map((e, index) => {
-                return (
-                  <>
-                    <div style={{ border: "1px solid black", padding: "30px", marginBottom: "30px" }}>
-                      <Grid
-                        xs={12}
-                        md={6}
-                        sx={{ pb: 3 }}
-                      >
-                        <Typography sx={{ pb: 1, fontSize: 13 }}>
-                          Jenis Training
-                        </Typography>
-                        <form noValidate>
-                          <FormControl sx={{ width: '100%' }}>
-                            <OutlinedInput
-                              onChange={(ev) => {
-                                let rencana = rencanaTraining.concat([])
-                                rencana[index] = {
-                                  ...e,
-                                  JenisTraining: ev.target.value
-                                }
-                                setRencanaTraining(rencana)
-                              }}
-                              value={rencanaTraining[index].JenisTraining}
-                            />
-                          </FormControl>
-                        </form>
-                      </Grid>
-                      <Grid
-                        xs={12}
-                        md={6}
-                        sx={{ pb: 3 }}
-                      >
-                        <Typography sx={{ pb: 1, fontSize: 13 }}>
-                          Tanggal / Bulan
-                        </Typography>
-                        <form noValidate>
-                          <FormControl sx={{ width: '100%' }}>
-                            <OutlinedInput
-                              onChange={(ev) => {
-                                let rencana = rencanaTraining.concat([])
-                                rencana[index] = {
-                                  ...e,
-                                  tglBulan: ev.target.value
-                                }
-                                setRencanaTraining(rencana)
-                              }}
-                              value={rencanaTraining[index].tglBulan}
-                            />
-                          </FormControl>
-                        </form>
-                      </Grid>
-                      {pencapaianHourMeter.length > 1 ? (
-                        <button style={{ marginRight: "30px", width: "200px", padding: "10px" }}
-                          onClick={() => deleteRencana(index)}>Delete</button>
-                      ) : (
-                        <></>
-                      )}
-                      <button style={{ width: "200px", padding: "10px" }}
-                        onClick={() => addRencana()}>Add</button>
-                    </div>
-                  </>
-                )
-              })}
-
-
-            </div>
-          </div>
-        </>
       ) : (
         <>
           <button style={{ marginTop: '40px', marginLeft: '50px', width: "200px", padding: "10px" }}
-            onClick={() => setPage(2)}>Previous</button>
+            onClick={() => setPage(1)}>Previous</button>
           <button style={{ marginTop: '40px', marginLeft: '50px', width: "200px", padding: "10px" }}
             onClick={() => toPDF()}>Download PDF</button>
           <div className='custom'
@@ -734,7 +425,7 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                           fontWeight: 900
                         }}
                       >
-                        JOB SITE
+                        JABATAN
                       </td>
                       <td
                         style={{
@@ -755,7 +446,7 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                           fontWeight: 900
                         }}
                       >
-                        {jobSite}
+                        {value.jabatan}
                       </td>
                     </tr>
                   </tbody>
@@ -863,7 +554,7 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                           fontWeight: 900
                         }}
                       >
-                        PERIODE BULAN
+                        JOB SITE
                       </td>
                       <td
                         style={{
@@ -884,7 +575,7 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                           fontWeight: 900
                         }}
                       >
-                        {`${value.bulan} ${value.tahun}`}
+                        {jobSite}
                       </td>
                     </tr>
                   </tbody>
@@ -896,8 +587,9 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                 style={{
                   width: "100%",
                   textAlign: "left",
-                  borderLeft: "1px solid black",
+                  // borderLeft: "1px solid black",
                   borderTop: "1px solid black"
+
                 }}
               >
                 <tbody>
@@ -907,27 +599,27 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                       backgroundColor: "yellow"
                     }}
                   >
-                    <th style={{ fontSize: 20, fontWeight: 900 }}>
-                      TANGGAL PENILAIAN
+                    <th style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", }}>
+                      Tanggal Penilaian
+                    </th>
+                    <th style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderBottom: "unset", borderTop: "unset", borderRight: "unset", }}>
+                      Kategori Penilaian
                     </th>
                     <th
                       colSpan={2}
-                      style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderBottom: "unset", borderTop: "unset" }}
+                      style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderRight: "unset", borderBottom: "unset", borderTop: "unset" }}
                     >
-                      PARAMETER PENILAIAN
+                      Parameter Penilaian
                     </th>
-                    <th style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderLeft: "unset", borderBottom: "unset", borderTop: "unset" }}>
-                      BOBOT
+                    <th style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderRight: "unset", borderBottom: "unset", borderTop: "unset" }}>
+                      Bobot
                     </th>
                     <th colSpan={3}
-                      style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderLeft: "unset", borderBottom: "unset", borderTop: "unset" }}>
-                      SKOR
+                      style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderRight: "unset", borderBottom: "unset", borderTop: "unset" }}>
+                      Skor
                     </th>
-                    <th style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderLeft: "unset", borderBottom: "unset", borderTop: "unset" }}>
-                      KATEGORI
-                    </th>
-                    <th style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderLeft: "unset", borderBottom: "unset", borderTop: "unset" }}>
-                      KETERANGAN
+                    <th style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderBottom: "unset", borderTop: "unset" }}>
+                      Keterangan
                     </th>
                   </tr>
                   <tr
@@ -937,49 +629,30 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                       backgroundColor: "yellow"
                     }}
                   >
-                    <td style={{ fontSize: 20, fontWeight: 900, borderBottom: "1px solid black" }}></td>
                     <td style={{ fontSize: 20, fontWeight: 900, borderBottom: "1px solid black", borderLeft: "1px solid black" }}></td>
-                    <td style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderLeft: "unset", borderTop: "unset" }}></td>
-                    <td style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderLeft: "unset", borderTop: "unset" }}></td>
-                    <td style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderLeft: "unset" }}>HASIL</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderLeft: "unset" }}>NILAI MOR</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderLeft: "unset" }}>NILAI</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderLeft: "unset", borderTop: "unset" }}></td>
-                    <td style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderLeft: "unset", borderTop: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, borderBottom: "1px solid black", borderLeft: "1px solid black" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, borderBottom: "1px solid black", borderLeft: "1px solid black" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, borderBottom: "1px solid black", }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderRight: "unset", borderTop: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderRight: "unset" }}><div style={{ paddingLeft: "30px", paddingRight: "30px" }}>Hasil</div></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderRight: "unset" }}>Nilai MOR</td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderRight: "unset" }}>Nilai Akhir</td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "1px solid black", borderTop: "unset" }}></td>
                   </tr>
                   <tr>
                     <td
-                      rowSpan={9}
+                      rowSpan={5}
                       style={{
                         fontSize: 20,
                         fontWeight: 900,
-                        border: "unset"
+                        border: "unset",
+                        borderBottom: "1px solid black", borderLeft: "1px solid black"
                       }}
                     >
                       <div style={{ transform: "rotate(270deg)" }}>{tglEfektifStringState}</div>
                     </td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>A.</td>
-                    <td
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 900,
-                        borderLeft: "1px solid black", borderBottom: "1px solid black",
-                        textAlign: "left"
-                      }}
-                    >
-                      DISIPLIN
-                    </td>
-                    <td
-                      colSpan={7}
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 900,
-                        borderRight: "1px solid black", borderBottom: "1px solid black"
-                      }}
-                    />
-                  </tr>
-                  <tr style={{ border: "unset" }}>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>1.</td>
+                    <td rowSpan={3} style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>1. Penilaian Skala Individu</td>
+                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>A</td>
                     <td
                       style={{
                         fontSize: 20,
@@ -990,15 +663,14 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                     >
                       Tingkat Kehadiran (ATR)
                     </td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>20%</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{`${value.tingkat_kehadiran_hasil} %`}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.tingkat_kehadiran_nilai_mor}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.tingkat_kehadiran_nilai_akhir}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.tingkat_kehadiran_kategori}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }}>{keterangan(value.tingkat_kehadiran_kategori)}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>20%</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{`${value.tingkat_kehadiran_hasil} %`}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.tingkat_kehadiran_nilai_mor}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.tingkat_kehadiran_nilai_akhir}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }}>{value.tingkat_kehadiran_kategori}</td>
                   </tr>
                   <tr style={{ border: "unset" }}>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>2.</td>
+                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>B</td>
                     <td
                       style={{
                         fontSize: 20,
@@ -1007,39 +679,16 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                         textAlign: "left"
                       }}
                     >
-                      Tepat Waktu dan Disiplin Kerja
+                      Pencapaian Hours Meter Pada Hari Efektif Bekerja (HM)
                     </td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>10%</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.disiplin_kerja_nilai_mor}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.disiplin_kerja_nilai_mor}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.disiplin_kerja_nilai_akhir}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.disiplin_kerja_kategori}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }}>{keterangan(value.disiplin_kerja_kategori)}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>20%</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{`${value.hours_meter_hasil} %`}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.hours_meter_nilai_mor}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.hours_meter_nilai_akhir}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }}>{getKeterangan(value.hours_meter_kategori)}</td>
                   </tr>
                   <tr style={{ border: "unset" }}>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>B.</td>
-                    <td
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 900,
-                        borderRight: "unset",
-                        textAlign: "left", borderLeft: "1px solid black", borderBottom: "1px solid black",
-                      }}
-                    >
-                      UPAYA PENCAPAIAN TERBAIK
-                    </td>
-                    <td
-                      colSpan={7}
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 900,
-                        borderLeft: "unset",
-                        borderRight: "1px solid black", borderBottom: "1px solid black",
-                      }}
-                    />
-                  </tr>
-                  <tr style={{ border: "unset" }}>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>1.</td>
+                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>C</td>
                     <td
                       style={{
                         fontSize: 20,
@@ -1048,271 +697,160 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                         textAlign: "left"
                       }}
                     >
-                      Pencapaian Hours Meter (HM)
+                      Hazard Report (KTA/TTA)
                     </td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>20%</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>{value.hours_meter_hasil}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>{value.hours_meter_nilai_mor}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>{value.hours_meter_nilai_akhir}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>{value.hours_meter_kategori}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }}>{keterangan(value.hours_meter_kategori)}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>15%</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{`${value.hazard_report_hasil}`}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.hazard_report_nilai_mor}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.hazard_report_nilai_akhir}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }}>{getKeterangan(value.hazard_report_kategori)}</td>
                   </tr>
                   <tr style={{ border: "unset" }}>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>2.</td>
+                    <td rowSpan={2} style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>2. Penilaian Skala Project</td>
+                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>A</td>
                     <td
                       style={{
                         fontSize: 20,
                         fontWeight: 900,
-                        borderRight: "unset",
-                        textAlign: "left", borderLeft: "1px solid black", borderBottom: "1px solid black",
-                      }}
-                    >
-                      Pencapaian Produktifitas Individu
-                    </td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>25%</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>{`${value.productivity_individu_hasil} %`}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>{value.productivity_individu_nilai_mor}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>{value.productivity_individu_nilai_akhir}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>{value.productivity_individu_kategori}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }}>{keterangan(value.productivity_individu_kategori)}</td>
-                  </tr>
-                  <tr style={{ border: "unset" }}>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>C.</td>
-                    <td
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 900,
-                        borderRight: "unset",
-                        textAlign: "left",
                         borderLeft: "1px solid black", borderBottom: "1px solid black",
-                      }}
-                    >
-                      SAFETY AWARENESS
-                    </td>
-                    <td
-                      colSpan={7}
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 900,
-                        borderLeft: "unset",
-                        borderRight: "1px solid black", borderBottom: "1px solid black",
-                      }}
-                    />
-                  </tr>
-                  <tr style={{ border: "unset" }}>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>1.</td>
-                    <td
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 900,
-                        borderRight: "unset",
-                        textAlign: "left",
-                        borderLeft: "1px solid black", borderBottom: "1px solid black",
-                      }}
-                    >
-                      Tingkat Keseringan Insiden
-                    </td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>20%</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>{value.keseringan_insiden_hasil}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>{value.keseringan_insiden_nilai_mor}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>{value.keseringan_insiden_nilai_akhir}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", }}>{value.keseringan_insiden_kategori}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }}>{keterangan(value.keseringan_insiden_kategori)}</td>
-                  </tr>
-                  <tr style={{ border: "unset" }}>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black" }}>2.</td>
-                    <td
-                      style={{
-                        fontSize: 20,
-                        fontWeight: 900,
-                        borderRight: "unset",
                         textAlign: "left"
-                        , borderLeft: "1px solid black",
                       }}
                     >
-                      Hazard Report
+                      Pencapaian Produksi Skala Project
                     </td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", }}>5%</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", }}>{value.hazard_report_hasil}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", }}>{value.hazard_report_nilai_mor}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", }}>{value.hazard_report_nilai_akhir}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", }}>{value.hazard_report_kategori}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderRight: "1px solid black", }}>{keterangan(value.hazard_report_kategori)}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>25%</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{`${value.pencapaian_produksi_hasil} %`}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.pencapaian_produksi_nilai_mor}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.pencapaian_produksi_nilai_akhir}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }}>{getKeterangan(value.pencapaian_produksi_kategori)}</td>
+                  </tr>
+                  <tr style={{ border: "unset" }}>
+                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>B</td>
+                    <td
+                      style={{
+                        fontSize: 20,
+                        fontWeight: 900,
+                        borderLeft: "1px solid black", borderBottom: "1px solid black",
+                        textAlign: "left"
+                      }}
+                    >
+                      Tingkat Keseringan Insiden Skala Departemen
+                    </td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>20%</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{`${value.keseringan_insiden_hasil}`}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.keseringan_insiden_nilai_mor}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.keseringan_insiden_nilai_akhir}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }}>{getKeterangan(value.keseringan_insiden_kategori)}</td>
+                  </tr>
+                  <tr style={{ border: "unset" }}>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                  </tr>
+                  <tr style={{ border: "unset" }}>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                  </tr>
+                  <tr style={{ border: "unset" }}>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                  </tr>
+                  <tr style={{ border: "unset" }}>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                    <td style={{ fontSize: 20, fontWeight: 900, border: "unset" }}></td>
+                  </tr>
+                  <tr style={{ border: "unset" }}>
+                    <td colSpan={4} style={{ fontSize: 20, fontWeight: 900, borderTop: "1px solid black", borderLeft: "1px solid black" }}>Disiplin Bekerja (A1)</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderTop: "1px solid black", borderLeft: "1px solid black" }}>20%</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderTop: "1px solid black", borderLeft: "1px solid black" }}>{`${value.tingkat_kehadiran_hasil} %`}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderTop: "1px solid black", borderLeft: "1px solid black" }}>{value.tingkat_kehadiran_nilai_mor}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderTop: "1px solid black", borderLeft: "1px solid black", borderRight: "1px solid black" }}>{value.tingkat_kehadiran_nilai_akhir}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, border: "unset" }}></td>
+                  </tr>
+                  <tr style={{ border: "unset" }}>
+                    <td colSpan={4} style={{ fontSize: 20, fontWeight: 900, borderTop: "1px solid black", borderLeft: "1px solid black" }}>Usaha Mencapai Target Produksi (1B x 2A)</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderTop: "1px solid black", borderLeft: "1px solid black" }}>45%</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderTop: "1px solid black", borderLeft: "1px solid black" }}>{value.hmxproduksi_hasil}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderTop: "1px solid black", borderLeft: "1px solid black" }}>{value.hmxproduksi_nilai_mor}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderTop: "1px solid black", borderLeft: "1px solid black", borderRight: "1px solid black" }}>{value.hmxproduksi_nilai_akhir}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, border: "unset" }}></td>
+                  </tr>
+                  <tr style={{ border: "unset" }}>
+                    <td colSpan={4} style={{ fontSize: 20, fontWeight: 900, borderTop: "1px solid black", borderLeft: "1px solid black" }}>Usaha Menciptakan Keselamatan Bekerja (1C X 2B)</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderTop: "1px solid black", borderLeft: "1px solid black" }}>35%</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderTop: "1px solid black", borderLeft: "1px solid black" }}>{value.ifrxhazard_hasil}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderTop: "1px solid black", borderLeft: "1px solid black" }}>{value.ifrxhazard_nilai_mor}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderTop: "1px solid black", borderLeft: "1px solid black", borderRight: "1px solid black" }}>{value.ifrxhazard_nilai_akhir}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, border: "unset" }}></td>
                   </tr>
                   <tr style={{ border: "unset", backgroundColor: "yellow" }}>
-                    <td colSpan={3}
-                      style={{ fontSize: 20, fontWeight: 900, borderLeft: "unset", borderRight: "unset", border: "1px solid black", }}>
-                      Jumlah
-                    </td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderTop: "1px solid black", }}>100%</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderTop: "1px solid black", }}></td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderTop: "1px solid black", }}></td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderTop: "1px solid black", }}>{jumlahAkhir}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderTop: "1px solid black", }}>{kategori}</td>
-                    <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderTop: "1px solid black", borderRight: "1px solid black" }}>{keterangan(kategori)}</td>
+                    <td colSpan={7} style={{ fontSize: 20, fontWeight: 900, borderTop: "1px solid black", borderLeft: "1px solid black", borderBottom: "1px solid black" }}>Total Nilai Prestasi Kerja</td>
+                    <td style={{ fontSize: 20, fontWeight: 900, borderTop: "1px solid black", borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black", }}>{value.total_nilai_akhir}</td>
+                    <td style={{ fontSize: 20, fontWeight: 900, borderTop: "1px solid black", borderRight: "1px solid black", borderBottom: "1px solid black" }}>{getKeterangan(value.total_keterangan.kategori)}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div style={{ paddingTop: 80 }}>
+            <div style={{ paddingTop: 40 }}>
+              <div style={{ fontSize: 18, fontWeight: 900, marginBottom: 10 }}>
+                Catatan :
+              </div>
               <div style={{ display: "flex" }}>
-                <div style={{ width: "60%" }}>
-                  <div style={{ fontSize: 20, fontWeight: 900, marginBottom: 10 }}>
-                    PENCAPAIAN HOUR METER
-                  </div>
-                  <table
-                    style={{
-                      width: "100%",
-                      border: "unset",
-                      textAlign: "left"
-                    }}
-                  >
-                    <tbody>
-                      <tr
-                        style={{
-                          border: "unset",
-                          textAlign: "left",
-                          backgroundColor: "yellow"
-                        }}
-                      >
-                        <th style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderTop: "1px solid black", borderBottom: "1px solid black" }}>
-                          ALAT/EQUIPMENT
-                        </th>
-                        <th style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderTop: "1px solid black", borderBottom: "1px solid black" }}>PERIODE</th>
-                        <th style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderTop: "1px solid black", borderBottom: "1px solid black" }}>SHIFT</th>
-                        <th style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderTop: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black", }}>HOUR METER</th>
-                      </tr>
-                      {pencapaianHourMeter.map((e) => {
-                        return (
-                          <>
-                            <tr
-                              style={{
-                                border: "unset",
-                                textAlign: "left"
-                              }}
-                            >
-                              <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{e.alatEquipment}</td>
-                              <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{e.periode}</td>
-                              <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{e.shift}</td>
-                              <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }}>{e.hourMeter}</td>
-                            </tr>
-                          </>
-                        )
-                      })}
-                      <tr
-                        style={{
-                          border: "unset",
-                          textAlign: "left",
-                          backgroundColor: "yellow"
-                        }}
-                      >
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>TOTAL</td>
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{pencapaianHourMeterTotal.periode}</td>
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{pencapaianHourMeterTotal.shift}</td>
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }}>{pencapaianHourMeterTotal.hourMeter}</td>
-                      </tr>
-                      {/* <tr
-                        style={{
-                          border: "unset",
-                          textAlign: "left"
-                        }}
-                      >
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }} />
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }} />
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }} />
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }} />
-                      </tr>
-                      <tr
-                        style={{
-                          border: "unset",
-                          textAlign: "left"
-                        }}
-                      >
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }} />
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }} />
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }} />
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }} />
-                      </tr>
-                      <tr
-                        style={{
-                          border: "unset",
-                          textAlign: "left"
-                        }}
-                      >
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }} />
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }} />
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }} />
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }} />
-                      </tr> */}
-                    </tbody>
-                  </table>
+                <div style={{ fontSize: 18, fontWeight: 500, marginBottom: 10 }}>
+                  1.
                 </div>
-                <div style={{ width: "5%" }} />
-                <div style={{ width: "35%" }}>
-                  <div style={{ fontSize: 20, fontWeight: 900, marginBottom: 10 }}>
-                    RENCANA TRAINING
-                  </div>
-                  <table
-                    style={{
-                      width: "100%",
-                      border: "unset",
-                      textAlign: "left"
-                    }}
-                  >
-                    <tbody>
-                      <tr
-                        style={{
-                          border: "unset",
-                          textAlign: "left",
-                          backgroundColor: "yellow"
-                        }}
-                      >
-                        <th style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderTop: "1px solid black", borderBottom: "1px solid black" }}>TGL/BULAN</th>
-                        <th style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderTop: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }}>
-                          JENIS TRAINING
-                        </th>
-                      </tr>
-                      {rencanaTraining.map((e) => {
-                        return (
-                          <>
-                            <tr
-                              style={{
-                                border: "unset",
-                                textAlign: "left"
-                              }}
-                            >
-                              <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{e.tglBulan}</td>
-                              <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }} >{e.JenisTraining}</td>
-                            </tr>
-                          </>
-                        )
-                      })}
+                <div style={{ fontSize: 18, fontWeight: 500, marginBottom: 10, marginLeft: "15px", textAlign: "justify" }}>
+                  {value.total_keterangan.catatan_1}
+                </div>
+              </div>
 
-                      <tr
-                        style={{
-                          border: "unset",
-                          textAlign: "left",
-                          backgroundColor: "yellow"
-                        }}
-                      >
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }} />
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }} />
-                      </tr>
-                      {/* <tr
-                        style={{
-                          border: "unset",
-                          textAlign: "left"
-                        }}
-                      >
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black" }} />
-                        <td style={{ fontSize: 20, fontWeight: 900, height: 40, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }} />
-                      </tr> */}
-                    </tbody>
-                  </table>
+              <div style={{ display: "flex" }}>
+                <div style={{ fontSize: 18, fontWeight: 500, marginBottom: 10 }}>
+                  2.
+                </div>
+                <div style={{ fontSize: 18, fontWeight: 500, marginBottom: 10, marginLeft: "15px", textAlign: "justify" }}>
+                  {value.total_keterangan.catatan_2}
+                </div>
+              </div>
+
+              <div style={{ display: "flex" }}>
+                <div style={{ fontSize: 18, fontWeight: 500, marginBottom: 10 }}>
+                  3.
+                </div>
+                <div style={{ fontSize: 18, fontWeight: 500, marginBottom: 10, marginLeft: "15px", textAlign: "justify" }}>
+                  {value.total_keterangan.catatan_3}
                 </div>
               </div>
             </div>
-            <div style={{ marginTop: 120 }}>
+
+            <div style={{ paddingTop: 40 }}>
               <table style={{ width: "100%", border: "unset" }}>
                 <tbody>
                   <tr
@@ -1320,25 +858,243 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                   >
                     <td
                       style={{
-                        width: "50%",
-                        fontSize: 20,
-                        fontWeight: 900,
+                        textAlign: "left",
+                        width: "15%",
+                        fontSize: 18,
+                        fontWeight: 500,
                         height: 20,
                         border: "unset"
                       }}
                     >
-                      Diketahui,
+                      Indisipliner Report
                     </td>
                     <td
                       style={{
-                        width: "50%",
-                        fontSize: 20,
-                        fontWeight: 900,
+                        width: "5%",
+                        textAlign: "right",
+                        fontSize: 18,
+                        fontWeight: 500,
                         height: 20,
                         border: "unset"
                       }}
                     >
-                      Penilai,
+                      :
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "left",
+                        fontSize: 18,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      {value?.indisipliner_jenis ?? "-"}
+                    </td>
+                  </tr>
+
+                  <tr
+                    style={{ textAlign: "left", border: "unset" }}
+                  >
+                    <td
+                      style={{
+                        textAlign: "left",
+                        width: "15%",
+                        fontSize: 18,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      Pasal Pelanggaran
+                    </td>
+                    <td
+                      style={{
+                        width: "5%",
+                        textAlign: "right",
+                        fontSize: 18,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      :
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "left",
+                        fontSize: 18,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      {value?.indisipliner_pasal ?? "-"}
+                    </td>
+                  </tr>
+
+                  <tr
+                    style={{ textAlign: "left", border: "unset" }}
+                  >
+                    <td
+                      style={{
+                        textAlign: "left",
+                        width: "15%",
+                        fontSize: 18,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      Tanggal Berlaku
+                    </td>
+                    <td
+                      style={{
+                        width: "5%",
+                        textAlign: "right",
+                        fontSize: 18,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      :
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "left",
+                        fontSize: 18,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      {value?.indisipliner_tanggal_berlaku ?? "-"}
+                    </td>
+                  </tr>
+
+                  <tr
+                    style={{ textAlign: "left", border: "unset" }}
+                  >
+                    <td
+                      style={{
+                        textAlign: "left",
+                        width: "15%",
+                        fontSize: 18,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      Tanggal Berakhir
+                    </td>
+                    <td
+                      style={{
+                        width: "5%",
+                        textAlign: "right",
+                        fontSize: 18,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      :
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "left",
+                        fontSize: 18,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      {value?.indisipliner_tanggal_berakhir ?? "-"}
+                    </td>
+                  </tr>
+
+                  <tr
+                    style={{ textAlign: "left", border: "unset" }}
+                  >
+                    <td
+                      style={{
+                        textAlign: "left",
+                        width: "15%",
+                        fontSize: 18,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      Status
+                    </td>
+                    <td
+                      style={{
+                        width: "5%",
+                        textAlign: "right",
+                        fontSize: 18,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      :
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "left",
+                        fontSize: 18,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      {value?.indisipliner_status ?? "-"}
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+
+            <div style={{ marginTop: 80 }}>
+              <table style={{ width: "100%", border: "unset" }}>
+                <tbody>
+                  <tr
+                    style={{ textAlign: "left", border: "unset" }}
+                  >
+                    <td
+                      style={{
+                        width: "33%",
+                        fontSize: 20,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      Diketahui Oleh,
+                    </td>
+                    <td
+                      style={{
+                        width: "33%",
+                        fontSize: 20,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      Diperiksa Oleh,
+                    </td>
+                    <td
+                      style={{
+                        width: "33%",
+                        fontSize: 20,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      Dibuat Oleh,
                     </td>
                   </tr>
                   <tr
@@ -1352,7 +1108,7 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                         border: "unset"
                       }}
                     >
-                      <img width="150px" src={"../assets/Yogi Aditya Widodo.jpeg"} />
+                      <img width="150px" src={"../assets/Surata.png"} />
                     </td>
                     <td
                       style={{
@@ -1362,7 +1118,17 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                         border: "unset"
                       }}
                     >
-                      <img width="150px" src={"../assets/Ali Zakaria.jpeg"} />
+                      <img width="150px" src={"../assets/Yogi.png"} />
+                    </td>
+                    <td
+                      style={{
+                        fontSize: 20,
+                        fontWeight: 900,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      <img width="150px" src={"../assets/Shoiful.png"} />
                     </td>
                   </tr>
                   <tr
@@ -1371,22 +1137,32 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                     <td
                       style={{
                         fontSize: 20,
-                        fontWeight: 900,
+                        fontWeight: 500,
                         height: 20,
                         border: "unset"
                       }}
                     >
-                      <u>Yogi Aditya Widodo</u>
+                      <u>SURATA</u>
                     </td>
                     <td
                       style={{
                         fontSize: 20,
-                        fontWeight: 900,
+                        fontWeight: 500,
                         height: 20,
                         border: "unset"
                       }}
                     >
-                      <u>Ali Zakaria</u>
+                      <u>YOGI ADITYA WIDODO</u>
+                    </td>
+                    <td
+                      style={{
+                        fontSize: 20,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      <u>SHOIFUL ALIM</u>
                     </td>
                   </tr>
                   <tr
@@ -1395,7 +1171,17 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                     <td
                       style={{
                         fontSize: 20,
-                        fontWeight: 900,
+                        fontWeight: 500,
+                        height: 20,
+                        border: "unset"
+                      }}
+                    >
+                      Project Manager RMIP
+                    </td>
+                    <td
+                      style={{
+                        fontSize: 20,
+                        fontWeight: 500,
                         height: 20,
                         border: "unset"
                       }}
@@ -1405,12 +1191,12 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                     <td
                       style={{
                         fontSize: 20,
-                        fontWeight: 900,
+                        fontWeight: 500,
                         height: 20,
                         border: "unset"
                       }}
                     >
-                      Learning Academy Section Head
+                      Progdev Learning Academy
                     </td>
                   </tr>
                 </tbody>
@@ -1549,35 +1335,50 @@ export const DatabaseKaryawanTable = (props) => {
                   </TableCell>
                   <TableCell>
                   </TableCell>
-                  <TableCell colSpan={3}
+                  <TableCell colSpan={2}
                     align='center'
                     sx={{ borderLeft: "1px solid" }}>
                     Tingkat Kehadiran (ATR)
                   </TableCell>
-                  <TableCell colSpan={3}
-                    align='center'
-                    sx={{ borderLeft: "1px solid" }}>
-                    Disiplin Waktu dan Kerja
-                  </TableCell>
-                  <TableCell colSpan={3}
+                  <TableCell colSpan={2}
                     align='center'
                     sx={{ borderLeft: "1px solid" }}>
                     Pencapaian Hours Meter
                   </TableCell>
-                  <TableCell colSpan={3}
+                  <TableCell colSpan={2}
                     align='center'
                     sx={{ borderLeft: "1px solid" }}>
-                    Productivity Individu
+                    Pencapaian Produksi
                   </TableCell>
-                  <TableCell colSpan={3}
+                  <TableCell colSpan={2}
+                    align='center'
+                    sx={{ borderLeft: "1px solid" }}>
+                    HM x Pencapaian Produksi
+                  </TableCell>
+                  <TableCell colSpan={2}
                     align='center'
                     sx={{ borderLeft: "1px solid" }}>
                     Tingkat Keseringan Insiden
                   </TableCell>
-                  <TableCell colSpan={3}
+                  <TableCell colSpan={2}
                     align='center'
                     sx={{ borderLeft: "1px solid", borderRight: "1px solid" }}>
                     Hazard Report
+                  </TableCell>
+                  <TableCell colSpan={2}
+                    align='center'
+                    sx={{ borderLeft: "1px solid", borderRight: "1px solid" }}>
+                    Keseringan Insiden x Hazard Report
+                  </TableCell>
+                  <TableCell colSpan={1}
+                    align='center'
+                    sx={{ borderLeft: "1px solid", borderRight: "1px solid" }}>
+                    Nilai Akhir
+                  </TableCell>
+                  <TableCell colSpan={1}
+                    align='center'
+                    sx={{ borderLeft: "1px solid", borderRight: "1px solid" }}>
+                    Keterangan
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -1610,7 +1411,11 @@ export const DatabaseKaryawanTable = (props) => {
                   </TableCell>
                   <TableCell align='center'
                     sx={{ border: "1px solid" }}>
-                    NILAI
+                    Hasil
+                  </TableCell>
+                  <TableCell align='center'
+                    sx={{ border: "1px solid" }}>
+                    Nilai MOR
                   </TableCell>
                   <TableCell align='center'
                     sx={{ border: "1px solid" }}>
@@ -1622,7 +1427,11 @@ export const DatabaseKaryawanTable = (props) => {
                   </TableCell>
                   <TableCell align='center'
                     sx={{ border: "1px solid" }}>
-                    NILAI
+                    Hasil
+                  </TableCell>
+                  <TableCell align='center'
+                    sx={{ border: "1px solid" }}>
+                    Nilai MOR
                   </TableCell>
                   <TableCell align='center'
                     sx={{ border: "1px solid" }}>
@@ -1634,7 +1443,11 @@ export const DatabaseKaryawanTable = (props) => {
                   </TableCell>
                   <TableCell align='center'
                     sx={{ border: "1px solid" }}>
-                    NILAI
+                    Hasil
+                  </TableCell>
+                  <TableCell align='center'
+                    sx={{ border: "1px solid" }}>
+                    Nilai MOR
                   </TableCell>
                   <TableCell align='center'
                     sx={{ border: "1px solid" }}>
@@ -1645,32 +1458,12 @@ export const DatabaseKaryawanTable = (props) => {
                     Nilai MOR
                   </TableCell>
                   <TableCell align='center'
-                    sx={{ border: "1px solid" }}>
-                    NILAI
+                    sx={{ borderLeft: "1px solid", borderRight: "1px solid" }}>
+
                   </TableCell>
                   <TableCell align='center'
-                    sx={{ border: "1px solid" }}>
-                    Hasil
-                  </TableCell>
-                  <TableCell align='center'
-                    sx={{ border: "1px solid" }}>
-                    Nilai MOR
-                  </TableCell>
-                  <TableCell align='center'
-                    sx={{ border: "1px solid" }}>
-                    NILAI
-                  </TableCell>
-                  <TableCell align='center'
-                    sx={{ border: "1px solid" }}>
-                    Hasil
-                  </TableCell>
-                  <TableCell align='center'
-                    sx={{ border: "1px solid" }}>
-                    Nilai MOR
-                  </TableCell>
-                  <TableCell align='center'
-                    sx={{ border: "1px solid" }}>
-                    NILAI
+                    sx={{ borderLeft: "1px solid", borderRight: "1px solid" }}>
+
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -1735,22 +1528,6 @@ export const DatabaseKaryawanTable = (props) => {
                       </TableCell>
                       <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
                         align='center' >
-                        {customer.tingkat_kehadiran_nilai_akhir}
-                      </TableCell>
-                      <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
-                        align='center' >
-                        {customer.disiplin_kerja_nilai_mor}
-                      </TableCell>
-                      <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
-                        align='center' >
-                        {customer.disiplin_kerja_nilai_mor}
-                      </TableCell>
-                      <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
-                        align='center' >
-                        {customer.disiplin_kerja_nilai_akhir}
-                      </TableCell>
-                      <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
-                        align='center' >
                         {customer.hours_meter_hasil}
                       </TableCell>
                       <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
@@ -1759,19 +1536,19 @@ export const DatabaseKaryawanTable = (props) => {
                       </TableCell>
                       <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
                         align='center' >
-                        {customer.hours_meter_nilai_akhir}
+                        {customer.pencapaian_produksi_hasil}
                       </TableCell>
                       <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
                         align='center' >
-                        {customer.productivity_individu_hasil}
+                        {customer.pencapaian_produksi_nilai_mor}
                       </TableCell>
                       <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
                         align='center' >
-                        {customer.productivity_individu_nilai_mor}
+                        {customer.hmxproduksi_hasil}
                       </TableCell>
                       <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
                         align='center' >
-                        {customer.productivity_individu_nilai_akhir}
+                        {customer.hmxproduksi_nilai_mor}
                       </TableCell>
                       <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
                         align='center' >
@@ -1783,10 +1560,6 @@ export const DatabaseKaryawanTable = (props) => {
                       </TableCell>
                       <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
                         align='center' >
-                        {customer.keseringan_insiden_nilai_akhir}
-                      </TableCell>
-                      <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
-                        align='center' >
                         {customer.hazard_report_hasil}
                       </TableCell>
                       <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
@@ -1795,7 +1568,19 @@ export const DatabaseKaryawanTable = (props) => {
                       </TableCell>
                       <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
                         align='center' >
-                        {customer.hazard_report_nilai_akhir}
+                        {customer.ifrxhazard_hasil}
+                      </TableCell>
+                      <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
+                        align='center' >
+                        {customer.ifrxhazard_nilai_mor}
+                      </TableCell>
+                      <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
+                        align='center' >
+                        {customer.total_nilai_akhir}
+                      </TableCell>
+                      <TableCell sx={{ border: "1px solid", borderBottom: "0px solid" }}
+                        align='center' >
+                        {customer.total_keterangan.kategori}
                       </TableCell>
                     </TableRow>
                   );
