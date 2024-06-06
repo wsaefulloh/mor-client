@@ -667,7 +667,7 @@ function PrintPdf({ value, tglEfektif, tglEfektifString }) {
                     <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{`${value.tingkat_kehadiran_hasil} %`}</td>
                     <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.tingkat_kehadiran_nilai_mor}</td>
                     <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>{value.tingkat_kehadiran_nilai_akhir}</td>
-                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }}>{value.tingkat_kehadiran_kategori}</td>
+                    <td style={{ fontSize: 18, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black", borderRight: "1px solid black" }}>{getKeterangan(value.tingkat_kehadiran_kategori)}</td>
                   </tr>
                   <tr style={{ border: "unset" }}>
                     <td style={{ fontSize: 20, fontWeight: 900, borderLeft: "1px solid black", borderBottom: "1px solid black" }}>B</td>
